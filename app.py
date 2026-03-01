@@ -11,6 +11,7 @@ from modules.config_loader import load_settings, get_template_path
 from modules.ui_sidebar import render_sidebar
 from modules.ui_main import render_main
 from modules.ui_gov import render_gov_tab
+from modules.ui_debt_list import render_debt_list_tab
 from modules.pdf_engine import build_creditor_bundle, build_gov_bundle, merge_documents, build_manual_cover
 from modules.config_loader import get_issue_info
 
@@ -250,7 +251,10 @@ sidebar_data = render_sidebar()
 st.session_state["_warrant_date"] = sidebar_data["warrant_date"]
 
 # ── 탭 구조 ──
-tab_creditor, tab_gov = st.tabs(["📋 채권사 서류", "🏛️ 관공서 서류"])
+tab_debt_list, tab_creditor, tab_gov = st.tabs(["📊 채권목록", "📋 채권사 서류", "🏛️ 관공서 서류"])
+
+with tab_debt_list:
+    render_debt_list_tab()
 
 with tab_creditor:
     main_data = render_main()
