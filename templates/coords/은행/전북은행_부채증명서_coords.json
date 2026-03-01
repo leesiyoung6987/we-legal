@@ -1,0 +1,62 @@
+{
+  "form_name": "전북은행_부채증명서",
+  "bank_name": "전북은행",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 30.9,
+          "y_pct": 76.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 60.1,
+          "y_pct": 76.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 30.9,
+          "y_pct": 78.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 30.9,
+          "y_pct": 80.5,
+          "font_size": 10,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 43.0,
+          "y_pct": 85.0,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 30.9,
+          "y_pct": 84.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

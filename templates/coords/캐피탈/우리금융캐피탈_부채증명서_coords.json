@@ -1,0 +1,87 @@
+{
+  "form_name": "우리금융캐피탈_부채증명서",
+  "bank_name": "우리금융캐피탈",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 22.8,
+          "y_pct": 76.1,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 22.8,
+          "y_pct": 84.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 65.0,
+          "y_pct": 75.8,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 22.8,
+          "y_pct": 88.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 65.0,
+          "y_pct": 88.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 37.0,
+          "y_pct": 88.3,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "date",
+          "x_pct": 38.1,
+          "y_pct": 72.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 22.8,
+          "y_pct": 80.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "stamp",
+          "x_pct": 39.0,
+          "y_pct": 76.1,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

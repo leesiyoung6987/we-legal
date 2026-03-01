@@ -1,0 +1,62 @@
+{
+  "form_name": "새마을금고_통장거래내역",
+  "bank_name": "새마을금고",
+  "doc_type": "통장거래내역",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 21.1,
+          "y_pct": 82.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 34.0,
+          "y_pct": 84.2,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 38.0,
+          "y_pct": 82.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 48.0,
+          "y_pct": 82.4,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "bank_date_to",
+          "x_pct": 51.5,
+          "y_pct": 55.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "bank_date_from",
+          "x_pct": 51.5,
+          "y_pct": 52.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

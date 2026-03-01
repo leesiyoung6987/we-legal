@@ -1,0 +1,62 @@
+{
+  "form_name": "에스비아이저축은행_부채증명서",
+  "bank_name": "에스비아이저축은행",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 31.3,
+          "y_pct": 73.2,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 31.3,
+          "y_pct": 75.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 31.3,
+          "y_pct": 77.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 63.0,
+          "y_pct": 73.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 31.3,
+          "y_pct": 81.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 46.0,
+          "y_pct": 81.9,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

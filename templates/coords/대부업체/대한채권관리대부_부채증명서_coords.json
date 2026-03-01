@@ -1,0 +1,94 @@
+{
+  "form_name": "대한채권관리대부_부채증명서",
+  "bank_name": "대한채권관리대부",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 24.0,
+          "y_pct": 20.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 63.0,
+          "y_pct": 20.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 63.0,
+          "y_pct": 22.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 24.0,
+          "y_pct": 25.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 24.0,
+          "y_pct": 40.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_birth",
+          "x_pct": 63.0,
+          "y_pct": 40.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_address",
+          "x_pct": 24.0,
+          "y_pct": 42.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 63.0,
+          "y_pct": 45.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_fax",
+          "x_pct": 24.0,
+          "y_pct": 47.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "stamp",
+          "x_pct": 32.0,
+          "y_pct": 20.8,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

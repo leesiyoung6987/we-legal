@@ -1,0 +1,94 @@
+{
+  "form_name": "한국캐피탈-부채증명서",
+  "bank_name": "한국캐피탈-부채증명서",
+  "doc_type": "",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 47.0,
+          "y_pct": 40.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 75.0,
+          "y_pct": 40.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 47.0,
+          "y_pct": 44.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_fax",
+          "x_pct": 75.0,
+          "y_pct": 44.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 47.0,
+          "y_pct": 48.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_year_suffix",
+          "x_pct": 42.6,
+          "y_pct": 53.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_month",
+          "x_pct": 49.0,
+          "y_pct": 53.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_day",
+          "x_pct": 55.0,
+          "y_pct": 53.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 70.4,
+          "y_pct": 55.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "stamp",
+          "x_pct": 81.1,
+          "y_pct": 55.7,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

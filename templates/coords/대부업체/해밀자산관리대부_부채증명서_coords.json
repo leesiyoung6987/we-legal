@@ -1,0 +1,12 @@
+{
+  "form_name": "해밀자산관리대부_부채증명서",
+  "bank_name": "해밀자산관리대부",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": []
+    }
+  ]
+}

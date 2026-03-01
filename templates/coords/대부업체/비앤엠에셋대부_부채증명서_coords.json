@@ -1,0 +1,93 @@
+{
+  "form_name": "비앤엠에셋대부_부채증명서",
+  "bank_name": "비앤엠에셋대부",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "date",
+          "x_pct": 62.4,
+          "y_pct": 28.8,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 62.4,
+          "y_pct": 31.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_year_suffix",
+          "x_pct": 39.0,
+          "y_pct": 72.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_month",
+          "x_pct": 46.0,
+          "y_pct": 72.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_day",
+          "x_pct": 54.0,
+          "y_pct": 72.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 56.6,
+          "y_pct": 76.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 56.6,
+          "y_pct": 81.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 56.6,
+          "y_pct": 83.2,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_fax",
+          "x_pct": 56.6,
+          "y_pct": 85.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 56.6,
+          "y_pct": 78.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

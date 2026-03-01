@@ -1,0 +1,94 @@
+{
+  "form_name": "삼성카드_부채증명서, 카드거래내역서",
+  "bank_name": "삼성카드",
+  "doc_type": "부채증명서, 카드거래내역서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 36.8,
+          "y_pct": 30.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 36.8,
+          "y_pct": 32.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 36.8,
+          "y_pct": 34.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 62.0,
+          "y_pct": 30.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 37.0,
+          "y_pct": 39.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 62.1,
+          "y_pct": 41.2,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 14.4,
+          "y_pct": 83.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 65.4,
+          "y_pct": 97.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 83.5,
+          "y_pct": 97.3,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "date",
+          "x_pct": 53.1,
+          "y_pct": 93.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

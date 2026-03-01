@@ -1,0 +1,119 @@
+{
+  "form_name": "케이비캐피탈_부채증명서",
+  "bank_name": "케이비캐피탈",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_birth",
+          "x_pct": 43.9,
+          "y_pct": 28.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_fax",
+          "x_pct": 50.5,
+          "y_pct": 32.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 68.4,
+          "y_pct": 43.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 68.4,
+          "y_pct": 45.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 31.0,
+          "y_pct": 56.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_birth",
+          "x_pct": 64.0,
+          "y_pct": 56.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 31.0,
+          "y_pct": 59.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_address",
+          "x_pct": 31.0,
+          "y_pct": 61.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "fixed_대리인",
+          "x_pct": 65.0,
+          "y_pct": 61.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 68.1,
+          "y_pct": 65.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 68.1,
+          "y_pct": 81.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 80.0,
+          "y_pct": 81.6,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 80.0,
+          "y_pct": 45.8,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

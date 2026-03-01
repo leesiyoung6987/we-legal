@@ -1,0 +1,115 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 28.0,
+          "y_pct": 27.1,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_id_front",
+          "x_pct": 58.5,
+          "y_pct": 27.1,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 28.2,
+          "y_pct": 31.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_id_front",
+          "x_pct": 58.3,
+          "y_pct": 31.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_address",
+          "x_pct": 27.8,
+          "y_pct": 35.7,
+          "font_size": 8,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 60.8,
+          "y_pct": 35.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_fax",
+          "x_pct": 41.3,
+          "y_pct": 50.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_year_suffix",
+          "x_pct": 46.8,
+          "y_pct": 72.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_month",
+          "x_pct": 55.1,
+          "y_pct": 72.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_day",
+          "x_pct": 62.7,
+          "y_pct": 72.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 44.3,
+          "y_pct": 76.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 60.7,
+          "y_pct": 76.2,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "stamp",
+          "x_pct": 35.3,
+          "y_pct": 27.7,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

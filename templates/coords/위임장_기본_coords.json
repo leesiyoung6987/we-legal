@@ -1,0 +1,22 @@
+{
+  "form_name": "위임장_기본",
+  "bank_name": "",
+  "doc_type": "위임장",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "stamp",
+          "x_pct": 84.2,
+          "y_pct": 87.8,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

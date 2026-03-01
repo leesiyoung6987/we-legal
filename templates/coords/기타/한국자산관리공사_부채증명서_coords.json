@@ -1,0 +1,174 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 19.2,
+          "y_pct": 57.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_id_front",
+          "x_pct": 38.5,
+          "y_pct": 59.8,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 18.6,
+          "y_pct": 61.9,
+          "font_size": 9,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 67.5,
+          "y_pct": 57.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 18.3,
+          "y_pct": 67.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_id_front",
+          "x_pct": 38.5,
+          "y_pct": 69.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_address",
+          "x_pct": 18.2,
+          "y_pct": 71.9,
+          "font_size": 9,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 67.2,
+          "y_pct": 67.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date",
+          "x_pct": 11.8,
+          "y_pct": 23.2,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 69.8,
+          "y_pct": 76.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 52.0,
+          "y_pct": 67.8,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 59.5,
+          "y_pct": 72.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 61.0,
+          "y_pct": 75.2,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 58.5,
+          "y_pct": 79.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_birth",
+          "x_pct": 60.9,
+          "y_pct": 82.2,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 68.3,
+          "y_pct": 80.0,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "date",
+          "x_pct": 72.7,
+          "y_pct": 67.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "fields": [
+        {
+          "field_id": "date",
+          "x_pct": 47.2,
+          "y_pct": 74.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 81.4,
+          "y_pct": 77.3,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

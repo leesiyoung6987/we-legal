@@ -1,0 +1,82 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 33.3,
+          "y_pct": 22.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_id_full",
+          "x_pct": 59.5,
+          "y_pct": 22.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_year_suffix",
+          "x_pct": 78.2,
+          "y_pct": 53.4,
+          "font_size": 9,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_month",
+          "x_pct": 82.1,
+          "y_pct": 53.4,
+          "font_size": 9,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_day",
+          "x_pct": 85.2,
+          "y_pct": 53.4,
+          "font_size": 9,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 55.5,
+          "y_pct": 60.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_birth",
+          "x_pct": 55.5,
+          "y_pct": 63.8,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 79.9,
+          "y_pct": 61.4,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "car_reg_no",
+          "x_pct": 22.1,
+          "y_pct": 27.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

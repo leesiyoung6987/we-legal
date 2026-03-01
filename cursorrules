@@ -1,0 +1,70 @@
+# WE Legal Automation - Cursor Rules
+
+## 프로젝트 개요
+회생파산 사건 처리용 서류 자동화 시스템 (Streamlit 앱).
+채권사 여러 개 선택 → 위임장 + 신분증 묶음 PDF 일괄 생성.
+
+## 기술 스택
+- Python 3.12 (3.13은 PyMuPDF 호환 문제)
+- Streamlit 1.41.1
+- PyMuPDF (fitz) - PDF 좌표 기반 텍스트 삽입
+- 한글 폰트: C:/Windows/Fonts/malgun.ttf (맑은고딕)
+- OS: Windows
+
+## 핵심 파일
+- `app.py`: 메인 Streamlit 앱 (322줄)
+- `config/creditors.json`: 채권사 472개 (type 필드로 카테고리 분류)
+- `config/staff.json`: 수임인 정보
+- `config/doc_matrix.json`: 기관유형별 필요서류 매트릭스
+- `templates/pdf/`: 빈 양식 PDF 파일들
+- `templates/coords/`: 좌표 JSON 파일들
+
+## 좌표 JSON 형식
+```json
+{
+  "form_name": "양식이름",
+  "total_pages": 2,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {"field_id": "applicant_name", "x_pct": 24.5, "y_pct": 79.0, "font_size": 11, "type": "text"},
+        {"field_id": "check_debt_cert", "x_pct": 6.5, "y_pct": 55.5, "font_size": 12, "type": "checkbox"}
+      ]
+    }
+  ]
+}
+```
+- x_pct, y_pct: 페이지 대비 퍼센트 좌표 (0~100)
+- type: "text" 또는 "checkbox"
+
+## PDF 생성 방식
+- PyMuPDF의 insert_text()로 좌표 기반 텍스트 삽입
+- 좌표는 퍼센트(%) → 실제 포인트(pt)로 변환하여 사용
+- 체크박스는 "✔" 문자 삽입
+
+## 현재 완성된 좌표
+- `templates/coords/위임장_기본_coords.json` ✅
+- `templates/coords/국민은행_부채_coords.json` ✅
+
+## 좌표 미등록 양식 (파일만 있음)
+- 롯데카드_부채.pdf, 롯데캐피탈_부채.pdf, 서울보증보험_부채.pdf
+- 신현대부실자산관리_부채.pdf, 예금보험공사_부채.pdf
+
+## 출력 구조 (채권사 1개당)
+1. 위임장 (채권사명 자동 삽입)
+2. 위임인 신분증
+3. 수임인 신분증
+
+## 코딩 규칙
+- 모든 UI 텍스트는 한국어
+- 변수/함수명은 영어 (snake_case)
+- 주석은 한국어 OK
+- Streamlit 위젯 key 충돌 주의
+- PDF 저장 시 한글 파일명 → ZIP 내에서 깨질 수 있으므로 영문 파일명 사용
+
+## 다음 작업 (우선순위)
+1. 국민은행 신청서 자동 채우기 앱에 연동
+2. 나머지 양식 PDF 좌표 등록
+3. doc_matrix.json 기반 서류 자동 판단
+4. 90개 양식 확장

@@ -1,0 +1,16 @@
+{
+  "_comment": "채권사 유형별 추가 서류 설정. match_list_file + match_keywords 둘 다 사용 가능.",
+  "대부업체": {
+    "match_list_file": "loan_companies.json",
+    "match_keywords": ["대부"],
+    "common_forms": [
+      {"template": "대부업체/자료송부청구서.pdf", "coords": "대부업체/자료송부청구서"}
+    ],
+    "fixed_attachments": [
+      {"name": "사업자등록증", "path": "company/리셋플러스_사업자등록증.pdf"}
+    ],
+    "agent_attachments": [
+      {"name": "재직증명서", "staff_key": "cert", "coords": "대부업체/재직증명서"}
+    ]
+  }
+}

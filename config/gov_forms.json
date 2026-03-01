@@ -1,0 +1,211 @@
+{
+  "_comment": "관공서 서류 양식 정의. unique_fields는 UI에서 추가 입력받을 항목.",
+  "구청_이륜차": {
+    "template": "관공서/구청_이륜차.pdf",
+    "coords": "관공서/구청_이륜차",
+    "unique_fields": [
+      {
+        "key": "bike_reg_no",
+        "label": "이륜차등록번호",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
+  "구청_지적전산": {
+    "template": "관공서/구청_지적전산.pdf",
+    "coords": "관공서/구청_지적전산",
+    "unique_fields": [],
+    "duplex": false
+  },
+  "동사무소_가족관계교부증명서": {
+    "template": "관공서/동사무소_가족관계교부증명서.pdf",
+    "coords": "관공서/동사무소_가족관계교부증명서",
+    "unique_fields": [],
+    "duplex": true
+  },
+  "동사무소_등초본교부": {
+    "template": "관공서/동사무소_등초본교부.pdf",
+    "coords": "관공서/동사무소_등초본교부",
+    "unique_fields": [],
+    "duplex": true
+  },
+  "동사무소_자동차 팩스민원": {
+    "template": "관공서/동사무소_자동차 팩스민원.pdf",
+    "coords": "관공서/동사무소_자동차 팩스민원",
+    "unique_fields": [],
+    "duplex": true
+  },
+  "동사무소_자동차등록원부": {
+    "template": "관공서/동사무소_자동차등록원부.pdf",
+    "coords": "관공서/동사무소_자동차등록원부",
+    "unique_fields": [
+      {
+        "key": "car_reg_no",
+        "label": "자동차등록번호",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
+  "동사무소_지방세": {
+    "template": "관공서/동사무소_지방세.pdf",
+    "coords": "관공서/동사무소_지방세",
+    "unique_fields": [
+      {
+        "key": "tax_doc_name",
+        "label": "지방세 체납리스트or완납증명서",
+        "type": "checkbox"
+      },
+      {
+        "key": "tax_year",
+        "label": "년도",
+        "type": "text"
+      }
+    ],
+    "duplex": true
+  },
+  "동사무소_출입국사실증명": {
+    "template": "관공서/동사무소_출입국사실증명.pdf",
+    "coords": "관공서/동사무소_출입국사실증명",
+    "unique_fields": [
+      {
+        "key": "period_from",
+        "label": "시작일",
+        "type": "text"
+      },
+      {
+        "key": "period_to",
+        "label": "종료일",
+        "type": "text"
+      }
+    ],
+    "duplex": true
+  },
+  "무상거주사실확인서": {
+    "template": "관공서/무상거주사실확인서.pdf",
+    "coords": "관공서/무상거주사실확인서",
+    "unique_fields": [
+      {
+        "key": "residence_period",
+        "label": "거주기간",
+        "type": "text"
+      },
+      {
+        "key": "landlord_name",
+        "label": "집주인 이름",
+        "type": "text"
+      },
+      {
+        "key": "landlord_relation",
+        "label": "관계",
+        "type": "text"
+      },
+      {
+        "key": "landlord_phone",
+        "label": "집주인 전화번호",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
+  "법원_개인회생,파산(제증명신청서)": {
+    "template": "관공서/법원_개인회생,파산(제증명신청서).pdf",
+    "coords": "관공서/법원_개인회생,파산(제증명신청서)",
+    "unique_fields": [
+      {
+        "key": "case_no",
+        "label": "사건번호",
+        "type": "text"
+      },
+      {
+        "key": "court_name",
+        "label": "법원명",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
+  "법원_위임장": {
+    "template": "관공서/법원_위임장.pdf",
+    "coords": "관공서/법원_위임장",
+    "unique_fields": [
+      {
+        "key": "case_no",
+        "label": "사건번호",
+        "type": "text"
+      },
+      {
+        "key": "court_name",
+        "label": "법원명",
+        "type": "text"
+      },
+      {
+        "key": "plaintiff",
+        "label": "원고",
+        "type": "text"
+      },
+      {
+        "key": "defendant",
+        "label": "피고",
+        "type": "text"
+      },
+      {
+        "key": "delegation_content",
+        "label": "위임한 내용",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
+  "법원_제증명신청서": {
+    "template": "관공서/법원_제증명신청서.pdf",
+    "coords": "관공서/법원_제증명신청서",
+    "unique_fields": [
+      {
+        "key": "case_no",
+        "label": "사건번호",
+        "type": "text"
+      },
+      {
+        "key": "court_name",
+        "label": "법원명",
+        "type": "text"
+      },
+      {
+        "key": "plaintiff",
+        "label": "원고",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
+  "법원_채권압류해제신청서": {
+    "template": "관공서/법원_채권압류해제신청서.pdf",
+    "coords": "관공서/법원_채권압류해제신청서",
+    "unique_fields": [
+      {
+        "key": "case_no",
+        "label": "사건번호",
+        "type": "text"
+      },
+      {
+        "key": "court_name",
+        "label": "법원명",
+        "type": "text"
+      },
+      {
+        "key": "creditor_name",
+        "label": "채권자",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
+  "세무서": {
+    "template": "관공서/세무서.pdf",
+    "coords": "관공서/세무서",
+    "unique_fields": [],
+    "duplex": true
+  }
+}

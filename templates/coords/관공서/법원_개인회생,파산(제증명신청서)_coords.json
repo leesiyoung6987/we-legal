@@ -1,0 +1,73 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 18.2,
+          "y_pct": 19.8,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "case_no",
+          "x_pct": 18.2,
+          "y_pct": 17.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_year",
+          "x_pct": 40.2,
+          "y_pct": 79.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_month",
+          "x_pct": 51.3,
+          "y_pct": 79.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "date_day",
+          "x_pct": 58.2,
+          "y_pct": 79.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 48.8,
+          "y_pct": 83.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 46.7,
+          "y_pct": 87.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "court_name",
+          "x_pct": 44.5,
+          "y_pct": 92.6,
+          "font_size": 20,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "form_name": "국민카드_카드거래내역서",
+  "bank_name": "국민카드",
+  "doc_type": "카드거래내역서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "agent_name",
+          "x_pct": 33.8,
+          "y_pct": 48.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_birth",
+          "x_pct": 33.8,
+          "y_pct": 49.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 33.8,
+          "y_pct": 51.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 69.3,
+          "y_pct": 67.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 69.3,
+          "y_pct": 71.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "card_period",
+          "x_pct": 34.2,
+          "y_pct": 37.1,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

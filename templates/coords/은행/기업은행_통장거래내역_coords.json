@@ -1,0 +1,70 @@
+{
+  "form_name": "기업은행_통장거래내역",
+  "bank_name": "기업은행",
+  "doc_type": "통장거래내역",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 29.1,
+          "y_pct": 36.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 70.1,
+          "y_pct": 34.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 16.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 70.0,
+          "y_pct": 39.7,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 29.0,
+          "y_pct": 40.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 40.8,
+          "y_pct": 40.5,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "bank_date_from",
+          "x_pct": 43.7,
+          "y_pct": 47.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "bank_date_to",
+          "x_pct": 69.3,
+          "y_pct": 47.4,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

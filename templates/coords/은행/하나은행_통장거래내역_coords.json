@@ -1,0 +1,53 @@
+{
+  "form_name": "하나은행_통장거래내역",
+  "bank_name": "하나은행",
+  "doc_type": "통장거래내역",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "agent_phone",
+          "x_pct": 71.8,
+          "y_pct": 54.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 31.9,
+          "y_pct": 80.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 70.0,
+          "y_pct": 80.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 31.9,
+          "y_pct": 84.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "bank_period",
+          "x_pct": 71.0,
+          "y_pct": 29.1,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

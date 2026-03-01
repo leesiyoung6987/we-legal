@@ -1,0 +1,54 @@
+{
+  "form_name": "신협_부채증명서",
+  "bank_name": "신협",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 45.0,
+          "y_pct": 89.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 68.0,
+          "y_pct": 89.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_address",
+          "x_pct": 45.0,
+          "y_pct": 92.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 75.0,
+          "y_pct": 89.5,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "fixed_대리인",
+          "x_pct": 62.0,
+          "y_pct": 89.5,
+          "font_size": 10,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

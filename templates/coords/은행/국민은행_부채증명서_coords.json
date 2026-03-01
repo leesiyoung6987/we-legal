@@ -1,0 +1,162 @@
+{
+  "form_name": "국민은행_부채증명서",
+  "bank_name": "국민은행",
+  "doc_type": "부채증명서",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "date_year_suffix",
+          "x_pct": 46.8,
+          "y_pct": 72.5,
+          "font_size": 9,
+          "type": "text"
+        },
+        {
+          "field_id": "date_month",
+          "x_pct": 49.5,
+          "y_pct": 72.5,
+          "font_size": 9,
+          "type": "text"
+        },
+        {
+          "field_id": "date_day",
+          "x_pct": 53.0,
+          "y_pct": 72.5,
+          "font_size": 9,
+          "type": "text"
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 28.1,
+          "y_pct": 78.5,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 68.4,
+          "y_pct": 78.5,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 40.0,
+          "y_pct": 87.5,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 28.5,
+          "y_pct": 87.5,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "client_birth_year",
+          "x_pct": 28.0,
+          "y_pct": 81.7,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "client_birth_month",
+          "x_pct": 35.0,
+          "y_pct": 81.7,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "client_birth_day",
+          "x_pct": 40.0,
+          "y_pct": 81.7,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 71.8,
+          "y_pct": 87.0,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "fixed_대리인",
+          "x_pct": 76.1,
+          "y_pct": 89.2,
+          "font_size": 11,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 32.0,
+          "y_pct": 81.6,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 75.0,
+          "y_pct": 81.6,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 23.0,
+          "y_pct": 84.0,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 70.0,
+          "y_pct": 83.8,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 32.0,
+          "y_pct": 86.6,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "agent_birth",
+          "x_pct": 75.0,
+          "y_pct": 86.6,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 72.0,
+          "y_pct": 88.7,
+          "font_size": 11,
+          "type": "text"
+        },
+        {
+          "field_id": "agent_sign",
+          "x_pct": 46.8,
+          "y_pct": 87.0,
+          "font_size": 11,
+          "type": "image",
+          "width_pct": 7.0,
+          "height_pct": 2.2
+        }
+      ]
+    }
+  ]
+}

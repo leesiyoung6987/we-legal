@@ -1,0 +1,37 @@
+{
+  "form_name": "우리은행_통장거래내역",
+  "bank_name": "우리은행",
+  "doc_type": "통장거래내역",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 35.0,
+          "y_pct": 83.1,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 35.0,
+          "y_pct": 85.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "bank_period",
+          "x_pct": 61.9,
+          "y_pct": 53.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "form_name": "기업은행_카드거래내역",
+  "bank_name": "기업은행",
+  "doc_type": "카드거래내역",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_name",
+          "x_pct": 27.9,
+          "y_pct": 34.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_birth",
+          "x_pct": 72.0,
+          "y_pct": 32.2,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "card_period",
+          "x_pct": 50.3,
+          "y_pct": 50.2,
+          "font_size": 9,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "app": {
+    "title": "리셋 위임장 자동화",
+    "subtitle": "회생파산 서류 자동화",
+    "icon": "⚖️",
+    "max_creditors": 20,
+    "default_creditors": 10
+  },
+  "doc_options": [
+    {"value": "none", "label": "— 선택 —"},
+    {"value": "debt_cert", "label": "부채증명서"},
+    {"value": "card_debt", "label": "카드부채증명서"},
+    {"value": "bank_history", "label": "통장거래내역"},
+    {"value": "card_history", "label": "카드거래내역"},
+    {"value": "custom", "label": "기타"}
+  ],
+  "needs_date_range": ["bank_history", "card_history"],
+  "font_path": "C:/Windows/Fonts/malgun.ttf",
+  "date_format": "%Y.%m.%d"
+}

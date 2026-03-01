@@ -1,0 +1,85 @@
+{
+  "form_name": "농협은행_통장거래내역",
+  "bank_name": "농협은행",
+  "doc_type": "통장거래내역",
+  "total_pages": 1,
+  "pages": [
+    {
+      "page": 1,
+      "fields": [
+        {
+          "field_id": "client_birth",
+          "x_pct": 35.2,
+          "y_pct": 19.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 20.0
+        },
+        {
+          "field_id": "client_address",
+          "x_pct": 35.0,
+          "y_pct": 23.9,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_phone",
+          "x_pct": 35.0,
+          "y_pct": 26.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "client_name",
+          "x_pct": 70.8,
+          "y_pct": 26.0,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_name",
+          "x_pct": 20.6,
+          "y_pct": 57.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_phone",
+          "x_pct": 59.0,
+          "y_pct": 57.3,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "agent_birth",
+          "x_pct": 32.5,
+          "y_pct": 59.5,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "bank_date_from",
+          "x_pct": 59.4,
+          "y_pct": 67.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        },
+        {
+          "field_id": "bank_date_to",
+          "x_pct": 79.1,
+          "y_pct": 67.6,
+          "font_size": 11,
+          "type": "text",
+          "spacing": 0.0
+        }
+      ]
+    }
+  ]
+}
