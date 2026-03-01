@@ -16,5 +16,6 @@
   ],
   "needs_date_range": ["bank_history", "card_history"],
   "font_path": "C:/Windows/Fonts/malgun.ttf",
-  "date_format": "%Y.%m.%d"
+  "date_format": "%Y.%m.%d",
+  "anthropic_api_key": "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"
 }

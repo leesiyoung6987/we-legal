@@ -9,6 +9,7 @@ import os
 import io
 from modules.credit_parser import parse_credit_pdf, classify_and_merge
 from modules.debt_list_builder import build_debt_list_workbook
+from modules.config_loader import load_settings
 
 
 def render_debt_list_tab():
@@ -16,19 +17,10 @@ def render_debt_list_tab():
     
     st.subheader("📊 신용조회 → 채권목록 자동 생성")
     
-    # API 키 설정
+    # API 키: settings.json에서 자동 로드
     if "anthropic_api_key" not in st.session_state:
-        st.session_state.anthropic_api_key = ""
-    
-    with st.expander("⚙️ API 설정", expanded=not bool(st.session_state.anthropic_api_key)):
-        api_key = st.text_input(
-            "Anthropic API Key",
-            value=st.session_state.anthropic_api_key,
-            type="password",
-            help="Claude API를 사용하여 PDF를 분석합니다."
-        )
-        if api_key:
-            st.session_state.anthropic_api_key = api_key
+        settings = load_settings()
+        st.session_state.anthropic_api_key = settings.get("anthropic_api_key", "")
     
     # PDF 업로드
     uploaded_file = st.file_uploader(
