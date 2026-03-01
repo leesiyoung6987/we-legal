@@ -78,6 +78,33 @@ def load_issue_manual():
     return _load_json("issue_manual.json")
 
 
+def load_insurance_manual():
+    """insurance_manual.json 로드 (보험사별 발급 매뉴얼)"""
+    return _load_json("insurance_manual.json")
+
+
+def get_insurance_info(company_name):
+    """보험사명으로 발급 매뉴얼 조회 (부분매칭 지원)
+
+    Returns:
+        {"유형", "발급방법", "고객센터", "내선번호", "홈페이지경로", "특이사항"} 또는 None
+    """
+    manual = load_insurance_manual()
+    # 1차: 정확히 일치
+    if company_name in manual:
+        return manual[company_name]
+    # 2차: 포함 매칭 (PDF에서 "메리츠화재" → manual "메리츠화재보험")
+    for name in sorted(manual.keys(), key=len, reverse=True):
+        if name in company_name or company_name in name:
+            return manual[name]
+    return None
+
+
+def load_law_firms():
+    """law_firms.json 로드 (거래처 법률사무소/법무사 목록)"""
+    return _load_json("law_firms.json")
+
+
 def get_issue_info(creditor_name):
     """채권사명으로 발급 매뉴얼 조회
     

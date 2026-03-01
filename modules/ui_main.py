@@ -158,30 +158,27 @@ def render_main():
     # ── 채권사명 자동완성 (datalist 주입) ──
     import json
     import streamlit.components.v1 as components
-    all_cred = load_creditors().get("type1_일반금융권", [])
-    # 저축은행 DB에서 이름 추가
+    # issue_manual.json에서 전체 기관명 로드
+    from modules.config_loader import load_issue_manual
+    manual = load_issue_manual()
+    all_cred = sorted(manual.keys())
+    # creditors.json 기존 목록도 병합
+    cred_json = load_creditors()
+    for key, val in cred_json.items():
+        if isinstance(val, list):
+            all_cred.extend(val)
+    # 저축은행 DB 병합
     from modules.config_loader import load_savings_banks
     savings = load_savings_banks()
-    all_cred = all_cred + sorted(savings.keys())
-    # 카드사 추가
-    cards = ["비씨카드", "국민카드", "롯데카드", "삼성카드", "신한카드", "하나카드", "현대카드", "우리카드", "농협카드"]
-    all_cred = all_cred + cards
-    # 캐피탈 추가
-    capitals = [
-        "롯데캐피탈", "씨엔에이치캐피탈", "애큐온캐피탈", "한국캐피탈", "현대캐피탈", "우리금융캐피탈", "케이비캐피탈",
-        "오케이캐피탈", "비엔케이캐피탈", "제이비우리캐피탈", "효성캐피탈", "엠캐피탈", "케이카캐피탈",
-        "산은캐피탈", "케이디비캐피탈", "엔에이치농협캐피탈", "하나캐피탈", "에스와이오토캐피탈",
-        "유미캐피탈", "메리츠캐피탈", "앤알캐피탈", "에이치비캐피탈", "에이원캐피탈", "예스캐피탈",
-        "에이원대부캐피탈", "신한캐피탈", "디쥐비캐피탈", "유한캐피탈", "리딩에이스캐피탈",
-        "오릭스캐피탈코리아", "한국투자캐피탈"
-    ]
-    all_cred = all_cred + capitals
-    # 대부업체 추가
+    all_cred.extend(savings.keys())
+    # 대부업체 병합
     from modules.config_loader import load_loan_companies
-    all_cred = all_cred + load_loan_companies()
-    # 기타 (통신사, 공공기관 등) 추가
+    all_cred.extend(load_loan_companies())
+    # 기타 (통신사, 공공기관 등) 병합
     from modules.config_loader import load_misc_companies
-    all_cred = all_cred + load_misc_companies()
+    all_cred.extend(load_misc_companies())
+    # 중복 제거 + 정렬
+    all_cred = sorted(set(all_cred))
     opts_js = json.dumps(all_cred, ensure_ascii=False)
     components.html(f"""
     <script>

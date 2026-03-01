@@ -7,11 +7,12 @@ app.py는 UI 조립 + PDF 생성 트리거만 담당.
 """
 
 import streamlit as st
+import io
 from modules.config_loader import load_settings, get_template_path
 from modules.ui_sidebar import render_sidebar
 from modules.ui_main import render_main
 from modules.ui_gov import render_gov_tab
-from modules.ui_debt_list import render_debt_list_tab
+from modules.ui_excel_delegation import render_excel_delegation_tab
 from modules.pdf_engine import build_creditor_bundle, build_gov_bundle, merge_documents, build_manual_cover
 from modules.config_loader import get_issue_info
 
@@ -221,6 +222,8 @@ def generate_gov_pdf(sidebar, gov_data, settings):
     st.rerun()
 
 
+
+
 # ══════════════════════════════════════
 # 메인 실행
 # ══════════════════════════════════════
@@ -251,10 +254,10 @@ sidebar_data = render_sidebar()
 st.session_state["_warrant_date"] = sidebar_data["warrant_date"]
 
 # ── 탭 구조 ──
-tab_debt_list, tab_creditor, tab_gov = st.tabs(["📊 채권목록", "📋 채권사 서류", "🏛️ 관공서 서류"])
+tab_excel, tab_creditor, tab_gov = st.tabs(["📥 엑셀 → 자동입력", "📋 채권사 서류", "🏛️ 관공서 서류"])
 
-with tab_debt_list:
-    render_debt_list_tab()
+with tab_excel:
+    render_excel_delegation_tab()
 
 with tab_creditor:
     main_data = render_main()
