@@ -112,11 +112,12 @@ def render_excel_delegation_tab():
         return
 
     # ── 파싱 ──
-    if "parsed_excel" not in st.session_state or st.session_state.get("_excel_name") != uploaded.name:
+    _file_key = f"{uploaded.name}_{uploaded.size}"
+    if "parsed_excel" not in st.session_state or st.session_state.get("_excel_key") != _file_key:
         with st.spinner("엑셀 파싱 중..."):
             parsed = parse_excel(io.BytesIO(uploaded.read()))
             st.session_state.parsed_excel = parsed
-            st.session_state._excel_name = uploaded.name
+            st.session_state._excel_key = _file_key
             st.session_state.merged_creditors = _merge_by_institution(parsed)
 
     parsed: ParsedExcel = st.session_state.parsed_excel
@@ -289,11 +290,12 @@ def render_excel_delegation_tab():
         sms_text = _build_customer_sms(customer_items, parsed.person.name, parsed.insurances)
         with st.expander("📱 고객요청 문자", expanded=True):
             st.code(sms_text, language=None)
-            # 클립보드 복사 버튼
+            # 클립보드 복사 버튼 (JSON으로 안전하게 전달)
             import streamlit.components.v1 as components
-            escaped = sms_text.replace('\\', '\\\\').replace('`', '\\`').replace("'", "\\'").replace('\n', '\\n')
+            sms_json = json.dumps(sms_text, ensure_ascii=False)
             components.html(f"""
-            <button onclick="navigator.clipboard.writeText('{escaped}').then(()=>{{this.innerText='✅ 복사됨!';setTimeout(()=>this.innerText='📋 문자 복사',1500)}})"
+            <script>var _sms={sms_json};</script>
+            <button onclick="navigator.clipboard.writeText(_sms).then(()=>{{this.innerText='✅ 복사됨!';setTimeout(()=>this.innerText='📋 문자 복사',1500)}})"
             style="background:#3b82f6;color:white;border:none;padding:10px 24px;border-radius:8px;
             font-size:15px;font-weight:600;cursor:pointer;width:100%;margin-top:4px;">
             📋 문자 복사</button>

@@ -24,8 +24,14 @@ def render_sidebar():
     staff_data = load_staff()
     
     with st.sidebar:
-        st.markdown("## ⚖️ 리셋 위임장 자동화")
-        st.caption("회생파산 서류 자동화")
+        # 로고
+        import os
+        _logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "logo.jpg")
+        if os.path.exists(_logo_path):
+            st.image(_logo_path, use_container_width=True)
+        else:
+            st.markdown("## ⚖️ 리셋플러스")
+        st.caption("WE Legal · 회생파산 서류 자동화")
         
         # ── 위임인 ──
         client = _render_client_section()
