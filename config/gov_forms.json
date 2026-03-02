@@ -1,5 +1,71 @@
 {
   "_comment": "관공서 서류 양식 정의. unique_fields는 UI에서 추가 입력받을 항목.",
+  "무상거주사실확인서": {
+    "template": "관공서/무상거주사실확인서.pdf",
+    "coords": "관공서/무상거주사실확인서",
+    "unique_fields": [
+      {
+        "key": "residence_period",
+        "label": "거주기간",
+        "type": "text"
+      },
+      {
+        "key": "landlord_name",
+        "label": "집주인 이름",
+        "type": "text"
+      },
+      {
+        "key": "landlord_relation",
+        "label": "관계",
+        "type": "text"
+      },
+      {
+        "key": "landlord_phone",
+        "label": "집주인 전화번호",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
+  "동사무소_지방세": {
+    "template": "관공서/동사무소_지방세.pdf",
+    "coords": "관공서/동사무소_지방세",
+    "unique_fields": [
+      {
+        "key": "tax_doc_name",
+        "label": "지방세 체납리스트or완납증명서",
+        "type": "checkbox"
+      },
+      {
+        "key": "tax_year",
+        "label": "년도",
+        "type": "text"
+      }
+    ],
+    "duplex": true
+  },
+  "법원_제증명신청서": {
+    "template": "관공서/법원_제증명신청서.pdf",
+    "coords": "관공서/법원_제증명신청서",
+    "unique_fields": [
+      {
+        "key": "case_no",
+        "label": "사건번호",
+        "type": "text"
+      },
+      {
+        "key": "court_name",
+        "label": "법원명",
+        "type": "text"
+      },
+      {
+        "key": "plaintiff",
+        "label": "원고",
+        "type": "text"
+      }
+    ],
+    "duplex": false
+  },
   "구청_이륜차": {
     "template": "관공서/구청_이륜차.pdf",
     "coords": "관공서/구청_이륜차",
@@ -48,23 +114,6 @@
     ],
     "duplex": false
   },
-  "동사무소_지방세": {
-    "template": "관공서/동사무소_지방세.pdf",
-    "coords": "관공서/동사무소_지방세",
-    "unique_fields": [
-      {
-        "key": "tax_doc_name",
-        "label": "지방세 체납리스트or완납증명서",
-        "type": "checkbox"
-      },
-      {
-        "key": "tax_year",
-        "label": "년도",
-        "type": "text"
-      }
-    ],
-    "duplex": true
-  },
   "동사무소_출입국사실증명": {
     "template": "관공서/동사무소_출입국사실증명.pdf",
     "coords": "관공서/동사무소_출입국사실증명",
@@ -81,33 +130,6 @@
       }
     ],
     "duplex": true
-  },
-  "무상거주사실확인서": {
-    "template": "관공서/무상거주사실확인서.pdf",
-    "coords": "관공서/무상거주사실확인서",
-    "unique_fields": [
-      {
-        "key": "residence_period",
-        "label": "거주기간",
-        "type": "text"
-      },
-      {
-        "key": "landlord_name",
-        "label": "집주인 이름",
-        "type": "text"
-      },
-      {
-        "key": "landlord_relation",
-        "label": "관계",
-        "type": "text"
-      },
-      {
-        "key": "landlord_phone",
-        "label": "집주인 전화번호",
-        "type": "text"
-      }
-    ],
-    "duplex": false
   },
   "법원_개인회생,파산(제증명신청서)": {
     "template": "관공서/법원_개인회생,파산(제증명신청서).pdf",
@@ -153,28 +175,6 @@
       {
         "key": "delegation_content",
         "label": "위임한 내용",
-        "type": "text"
-      }
-    ],
-    "duplex": false
-  },
-  "법원_제증명신청서": {
-    "template": "관공서/법원_제증명신청서.pdf",
-    "coords": "관공서/법원_제증명신청서",
-    "unique_fields": [
-      {
-        "key": "case_no",
-        "label": "사건번호",
-        "type": "text"
-      },
-      {
-        "key": "court_name",
-        "label": "법원명",
-        "type": "text"
-      },
-      {
-        "key": "plaintiff",
-        "label": "원고",
         "type": "text"
       }
     ],

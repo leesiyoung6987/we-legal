@@ -110,19 +110,25 @@ def generate_pdf(sidebar, main, settings):
     creditors = main["creditors"]
     print_bundles = []  # 인쇄용 (팩스 외)
     fax_bundles = {}    # 팩스용 {채권사명: doc}
-    progress = st.progress(0, text="PDF 생성 중...")
 
-    # 매뉴얼 커버 페이지 (인쇄용 맨 앞)
-    creditor_names = [c["name"] for c in creditors]
-    try:
-        manual_cover = build_manual_cover(creditor_names, client["name"], warrant_date)
-        if manual_cover.page_count > 0:
-            print_bundles.append(manual_cover)
-    except Exception as e:
-        print(f"[DEBUG] 매뉴얼 커버 에러: {e}")
+    # 상단 placeholder에 진행바 표시
+    ph = main.get("progress_placeholder")
+    if ph:
+        progress = ph.progress(0, text="PDF 생성 중...")
+    else:
+        progress = st.progress(0, text="PDF 생성 중...")
 
     for idx, cred in enumerate(creditors):
         progress.progress((idx + 1) / len(creditors), text=f"{cred['name']} 처리 중...")
+
+        # 법률사무소 기재 필요 채권사 → 사무소 정보 주입
+        selected_firm = st.session_state.get("law_firm_select", "")
+        if selected_firm and selected_firm != "— 직접입력 —":
+            from modules.config_loader import load_law_firms
+            _firms = load_law_firms()
+            _firm_data = _firms.get(selected_firm, {})
+            cred["law_firm"] = {"name": selected_firm, "tel": _firm_data.get("전화", "")}
+
         bundle = build_creditor_bundle(
             template_path, client, agent_info, cred,
             warrant_date, client_id_bytes, agent_id_bytes,
@@ -164,7 +170,7 @@ def generate_pdf(sidebar, main, settings):
     else:
         st.session_state.fax_zip_bytes = None
 
-    count_print = len(print_bundles) - (1 if print_bundles and print_bundles[0].page_count <= 2 else 0)  # 매뉴얼 제외
+    count_print = len(print_bundles)
     count_fax = len(fax_bundles)
     st.success(f"✅ 인쇄용 {count_print}개 + 팩스용 {count_fax}개 생성 완료!")
     st.rerun()
@@ -180,7 +186,11 @@ def generate_gov_pdf(sidebar, gov_data, settings):
 
     client, agent_info, warrant_date, client_id_bytes, agent_id_bytes, stamp_bytes, seal_cert_bytes = _build_client_agent(sidebar, settings)
 
-    progress = st.progress(0, text="관공서 서류 생성 중...")
+    ph = gov_data.get("progress_placeholder")
+    if ph:
+        progress = ph.progress(0, text="관공서 서류 생성 중...")
+    else:
+        progress = st.progress(0, text="관공서 서류 생성 중...")
     
     # 무상거주사실확인서 / 나머지 분리
     gov_forms = []
@@ -268,3 +278,13 @@ with tab_gov:
     gov_data = render_gov_tab()
     if gov_data["generate_clicked"]:
         generate_gov_pdf(sidebar_data, gov_data, settings)
+
+# 탭 자동 전환 (전달 버튼 클릭 후)
+if st.session_state.pop("_switch_to_creditor_tab", False):
+    import streamlit.components.v1 as components
+    components.html("""
+    <script>
+    const tabs = window.parent.document.querySelectorAll('[data-baseweb="tab"]');
+    if (tabs.length >= 2) tabs[1].click();
+    </script>
+    """, height=0)

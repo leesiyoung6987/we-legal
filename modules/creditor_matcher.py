@@ -103,16 +103,30 @@ def match_creditor(excel_name: str) -> MatchResult:
 
     all_names = _build_all_names()
 
+    # 0) 상호저축은행 → 저축은행 정규화
+    normalized = excel_name.replace("상호저축은행", "저축은행")
+
     # 1) 정확 매칭
     if excel_name in all_names:
         return MatchResult(
             excel_name, excel_name, True, "exact",
             issue_info=get_issue_info(excel_name)
         )
+    if normalized != excel_name and normalized in all_names:
+        return MatchResult(
+            excel_name, normalized, True, "alias",
+            issue_info=get_issue_info(normalized)
+        )
 
     # 2) 별칭 매칭
     if excel_name in ALIAS_MAP:
         key = ALIAS_MAP[excel_name]
+        return MatchResult(
+            excel_name, key, True, "alias",
+            issue_info=get_issue_info(key)
+        )
+    if normalized != excel_name and normalized in ALIAS_MAP:
+        key = ALIAS_MAP[normalized]
         return MatchResult(
             excel_name, key, True, "alias",
             issue_info=get_issue_info(key)

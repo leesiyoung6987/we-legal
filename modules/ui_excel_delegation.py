@@ -25,16 +25,34 @@ def _on_transfer_click():
         return
 
     p = parsed.person
-    if p.name:
-        st.session_state["client_name"] = p.name
-    if p.ssn_front:
-        st.session_state["client_id_front"] = p.ssn_front
-    if p.ssn_back:
-        st.session_state["client_id_back"] = p.ssn_back
-    if p.address:
-        st.session_state["client_address"] = p.address
-    if p.phone_clean:
-        st.session_state["client_phone"] = p.phone_clean
+    # 화면에서 수정한 값 우선 사용
+    name = st.session_state.get("ex_p_name", "") or p.name
+    ssn = st.session_state.get("ex_p_ssn", "") or p.ssn
+    phone = st.session_state.get("ex_p_phone", "") or p.phone
+    address = st.session_state.get("ex_p_addr", "") or p.address
+
+    # ssn 분리
+    ssn_str = str(ssn) if ssn else ""
+    if "-" in ssn_str:
+        ssn_front, ssn_back = ssn_str.split("-", 1)
+    elif len(ssn_str) > 6:
+        ssn_front, ssn_back = ssn_str[:6], ssn_str[6:]
+    else:
+        ssn_front, ssn_back = ssn_str, ""
+
+    import re
+    phone_clean = re.sub(r'\(.*?\)', '', str(phone)).strip() if phone else ""
+
+    if name:
+        st.session_state["client_name"] = name
+    if ssn_front:
+        st.session_state["client_id_front"] = ssn_front.strip()
+    if ssn_back:
+        st.session_state["client_id_back"] = ssn_back.strip()
+    if address:
+        st.session_state["client_address"] = address
+    if phone_clean:
+        st.session_state["client_phone"] = phone_clean
 
     transfer_items = _get_transfer_items(merged)
     count = len(transfer_items)
@@ -68,6 +86,7 @@ def _on_transfer_click():
 
     st.session_state["_excel_transferred"] = True
     st.session_state["_excel_transfer_count"] = count
+    st.session_state["_switch_to_creditor_tab"] = True
 
 
 # ═══════════════════════════════════════
@@ -131,11 +150,16 @@ def render_excel_delegation_tab():
         p = parsed.person
         c1, c2 = st.columns(2)
         with c1:
-            st.text_input("이름", value=p.name, key="ex_p_name", disabled=True)
-            st.text_input("주민번호", value=p.ssn, key="ex_p_ssn", disabled=True)
+            _name = st.text_input("이름", value=p.name, key="ex_p_name")
+            _ssn = st.text_input("주민번호", value=p.ssn, key="ex_p_ssn")
         with c2:
-            st.text_input("전화번호", value=p.phone, key="ex_p_phone", disabled=True)
-            st.text_input("주소", value=p.address, key="ex_p_addr", disabled=True)
+            _phone = st.text_input("전화번호", value=p.phone, key="ex_p_phone")
+            _addr = st.text_input("주소", value=p.address, key="ex_p_addr")
+        # 화면 입력값을 parsed에 반영
+        if _name: p.name = _name
+        if _ssn: p.ssn = _ssn
+        if _phone: p.phone = _phone
+        if _addr: p.address = _addr
 
     st.divider()
 
@@ -186,7 +210,7 @@ def render_excel_delegation_tab():
 
         # 유지/전체 필터
         if ins_scope == "유지":
-            filtered_ins = [ins for ins in all_ins if ins.status in ("유지", "휴면")]
+            filtered_ins = [ins for ins in all_ins if ins.status == "유지"]
         else:
             filtered_ins = all_ins
 
@@ -205,8 +229,10 @@ def render_excel_delegation_tab():
                 manual_info = get_insurance_info(comp) or {}
                 tel = manual_info.get("고객센터", "")
 
-                maintain = [e for e in entries if e.status in ("유지", "휴면")]
-                cancel = [e for e in entries if e.status not in ("유지", "휴면") and e.status]
+                # 상태별 분류
+                s_maintain = [e for e in entries if e.status == "유지"]
+                s_dormant = [e for e in entries if e.status == "휴면"]
+                s_cancel = [e for e in entries if e.status not in ("유지", "휴면") and e.status]
                 no_status = [e for e in entries if not e.status]
 
                 st.markdown(
@@ -215,37 +241,120 @@ def render_excel_delegation_tab():
                     f"<span style='color:#9ca3af;font-size:12px;margin-left:8px;'>{tel}</span>"
                     f"</div>", unsafe_allow_html=True)
 
-                if maintain:
-                    nos = ", ".join(e.policy_no for e in maintain if e.policy_no)
+                if s_maintain:
+                    nos = ", ".join(e.policy_no for e in s_maintain if e.policy_no)
                     st.markdown(
                         f"<div style='margin-left:16px;font-size:13px;'>"
                         f"<span style='background:#3b82f622;color:#3b82f6;padding:1px 6px;"
-                        f"border-radius:3px;font-size:11px;'>유지건 {len(maintain)}건</span> "
+                        f"border-radius:3px;font-size:11px;'>유지 {len(s_maintain)}건</span> "
                         f"예상해지환급금증명서<br>"
                         f"<span style='color:#9ca3af;font-size:11px;margin-left:8px;'>{nos}</span>"
                         f"</div>", unsafe_allow_html=True)
 
-                if cancel:
-                    nos = ", ".join(e.policy_no for e in cancel if e.policy_no)
-                    statuses = "/".join(sorted(set(e.status for e in cancel if e.status)))
+                if s_dormant:
+                    nos = ", ".join(e.policy_no for e in s_dormant if e.policy_no)
                     st.markdown(
                         f"<div style='margin-left:16px;font-size:13px;margin-top:4px;'>"
-                        f"<span style='background:#ef444422;color:#ef4444;padding:1px 6px;"
-                        f"border-radius:3px;font-size:11px;'>해지건 {len(cancel)}건</span> "
-                        f"해지확인서 ({statuses})<br>"
+                        f"<span style='background:#f59e0b22;color:#f59e0b;padding:1px 6px;"
+                        f"border-radius:3px;font-size:11px;'>휴면 {len(s_dormant)}건</span> "
+                        f"예상해지환급금증명서<br>"
                         f"<span style='color:#9ca3af;font-size:11px;margin-left:8px;'>{nos}</span>"
                         f"</div>", unsafe_allow_html=True)
+
+                if s_cancel:
+                    # 상태별 분리 표시 (실효/소멸/해약 등)
+                    from collections import OrderedDict as OD
+                    cancel_by_status = OD()
+                    for e in s_cancel:
+                        cancel_by_status.setdefault(e.status, []).append(e)
+                    for st_name, st_entries in cancel_by_status.items():
+                        nos = ", ".join(e.policy_no for e in st_entries if e.policy_no)
+                        st.markdown(
+                            f"<div style='margin-left:16px;font-size:13px;margin-top:4px;'>"
+                            f"<span style='background:#ef444422;color:#ef4444;padding:1px 6px;"
+                            f"border-radius:3px;font-size:11px;'>{st_name} {len(st_entries)}건</span> "
+                            f"해지확인서<br>"
+                            f"<span style='color:#9ca3af;font-size:11px;margin-left:8px;'>{nos}</span>"
+                            f"</div>", unsafe_allow_html=True)
 
                 if no_status:
                     st.markdown(
                         f"<div style='margin-left:16px;font-size:13px;margin-top:4px;'>"
-                        f"<span style='background:#f59e0b22;color:#f59e0b;padding:1px 6px;"
+                        f"<span style='background:#6b728022;color:#6b7280;padding:1px 6px;"
                         f"border-radius:3px;font-size:11px;'>상태 미입력 {len(no_status)}건</span>"
                         f"</div>", unsafe_allow_html=True)
         elif all_ins:
             st.divider()
             st.markdown("### 🛡️ 보험")
             st.warning(f"보험사 {len(all_ins)}개 있으나 상태(유지/실효 등)가 비어있습니다. 엑셀에 상태를 채워주세요.")
+
+        # ── 배우자 보험 ──
+        all_spouse_ins = [ins for ins in parsed.spouse_insurances if ins.name]
+        if all_spouse_ins:
+            if ins_scope == "유지":
+                spouse_ins = [ins for ins in all_spouse_ins if ins.status == "유지"]
+            else:
+                spouse_ins = all_spouse_ins
+
+            if spouse_ins:
+                st.divider()
+                st.markdown(f"### 💑 배우자 보험 ({len(spouse_ins)}건, {ins_scope} 모드)")
+
+                from collections import OrderedDict
+                sp_groups = OrderedDict()
+                for ins in spouse_ins:
+                    sp_groups.setdefault(ins.name, []).append(ins)
+
+                from modules.config_loader import get_insurance_info
+                for comp, entries in sp_groups.items():
+                    manual_info = get_insurance_info(comp) or {}
+                    tel = manual_info.get("고객센터", "")
+
+                    s_maintain = [e for e in entries if e.status == "유지"]
+                    s_dormant = [e for e in entries if e.status == "휴면"]
+                    s_cancel = [e for e in entries if e.status not in ("유지", "휴면") and e.status]
+
+                    st.markdown(
+                        f"<div style='margin:12px 0 4px;font-size:15px;'>"
+                        f"<b>{comp}</b>"
+                        f"<span style='color:#9ca3af;font-size:12px;margin-left:8px;'>{tel}</span>"
+                        f"</div>", unsafe_allow_html=True)
+
+                    if s_maintain:
+                        nos = ", ".join(e.policy_no for e in s_maintain if e.policy_no)
+                        st.markdown(
+                            f"<div style='margin-left:16px;font-size:13px;'>"
+                            f"<span style='background:#3b82f622;color:#3b82f6;padding:1px 6px;"
+                            f"border-radius:3px;font-size:11px;'>유지 {len(s_maintain)}건</span> "
+                            f"예상해지환급금증명서<br>"
+                            f"<span style='color:#9ca3af;font-size:11px;margin-left:8px;'>{nos}</span>"
+                            f"</div>", unsafe_allow_html=True)
+
+                    if s_dormant:
+                        nos = ", ".join(e.policy_no for e in s_dormant if e.policy_no)
+                        st.markdown(
+                            f"<div style='margin-left:16px;font-size:13px;margin-top:4px;'>"
+                            f"<span style='background:#f59e0b22;color:#f59e0b;padding:1px 6px;"
+                            f"border-radius:3px;font-size:11px;'>휴면 {len(s_dormant)}건</span> "
+                            f"예상해지환급금증명서<br>"
+                            f"<span style='color:#9ca3af;font-size:11px;margin-left:8px;'>{nos}</span>"
+                            f"</div>", unsafe_allow_html=True)
+
+                    if s_cancel:
+                        # 상태별 분리 표시 (실효/소멸/해약 등)
+                        from collections import OrderedDict as OD2
+                        cancel_by_status = OD2()
+                        for e in s_cancel:
+                            cancel_by_status.setdefault(e.status, []).append(e)
+                        for st_name, st_entries in cancel_by_status.items():
+                            nos = ", ".join(e.policy_no for e in st_entries if e.policy_no)
+                            st.markdown(
+                                f"<div style='margin-left:16px;font-size:13px;margin-top:4px;'>"
+                                f"<span style='background:#ef444422;color:#ef4444;padding:1px 6px;"
+                                f"border-radius:3px;font-size:11px;'>{st_name} {len(st_entries)}건</span> "
+                                f"해지확인서<br>"
+                                f"<span style='color:#9ca3af;font-size:11px;margin-left:8px;'>{nos}</span>"
+                                f"</div>", unsafe_allow_html=True)
 
     st.divider()
 
@@ -259,7 +368,7 @@ def render_excel_delegation_tab():
 
     with col2:
         if merged:
-            manual_pdf = _build_manual_pdf(merged, parsed.person.name, parsed.insurances)
+            manual_pdf = _build_manual_pdf(merged, parsed.person.name, parsed.insurances, parsed.spouse_insurances)
             if manual_pdf:
                 st.download_button("📋 발급매뉴얼 다운", data=manual_pdf,
                     file_name=f"발급매뉴얼_{parsed.person.name}.pdf",
@@ -267,27 +376,39 @@ def render_excel_delegation_tab():
             else:
                 st.button("📋 발급매뉴얼 다운", disabled=True, key="manual_dis", use_container_width=True)
 
-    # 보험 고객요청 건 확인 (유지건 중 DB고객요청 + 해지건)
-    has_ins_customer = False
-    if parsed.insurances:
+    # 보험 고객요청 건 확인 (유지건 중 DB고객요청 + 해지건) - 본인 + 배우자
+    def _has_ins_customer_items(ins_list):
+        if not ins_list:
+            return False
         ins_scope_btn = st.session_state.get("ins_type_select", "전체")
-        from modules.config_loader import get_insurance_info as _get_ins
-        for ins in parsed.insurances:
+        from modules.config_loader import get_insurance_info as _chk_ins
+        from collections import OrderedDict
+        groups = OrderedDict()
+        for ins in ins_list:
             if not ins.name:
                 continue
-            if ins_scope_btn == "유지" and ins.status not in ("유지", "휴면"):
+            if ins_scope_btn == "유지" and ins.status != "유지":
                 continue
-            if ins.status not in ("유지", "휴면"):
-                has_ins_customer = True
-                break
-            m = _get_ins(ins.name) or {}
-            if m.get("발급방법", "").strip() == "고객요청":
-                has_ins_customer = True
-                break
+            groups.setdefault(ins.name, []).append(ins)
+        for comp, entries in groups.items():
+            m = _chk_ins(comp) or {}
+            db_method = m.get("발급방법", "").strip()
+            maintain = [e for e in entries if e.status in ("유지", "휴면")]
+            cancel = [e for e in entries if e.status not in ("유지", "휴면")]
+            if ins_scope_btn == "전체" and maintain and cancel:
+                return True  # 혼합 → 고객요청
+            if cancel:
+                return True
+            if maintain and db_method == "고객요청":
+                return True
+        return False
+
+    has_ins_customer = _has_ins_customer_items(parsed.insurances)
+    has_spouse_ins_customer = _has_ins_customer_items(parsed.spouse_insurances)
 
     # 고객요청 문자 (바로 복사 가능)
-    if customer_items or has_ins_customer:
-        sms_text = _build_customer_sms(customer_items, parsed.person.name, parsed.insurances)
+    if customer_items or has_ins_customer or has_spouse_ins_customer:
+        sms_text = _build_customer_sms(customer_items, parsed.person.name, parsed.insurances, parsed.spouse_insurances)
         with st.expander("📱 고객요청 문자", expanded=True):
             st.code(sms_text, language=None)
             # 클립보드 복사 버튼 (JSON으로 안전하게 전달)
@@ -473,7 +594,7 @@ def _render_merged_row(i, item, badge_override=None):
 # 발급매뉴얼 PDF
 # ═══════════════════════════════════════
 
-def _build_manual_pdf(merged, client_name, insurances=None):
+def _build_manual_pdf(merged, client_name, insurances=None, spouse_insurances=None):
     try:
         from modules.pdf_engine import build_manual_cover
         all_names = [item["name"] for item in merged]
@@ -481,34 +602,57 @@ def _build_manual_pdf(merged, client_name, insurances=None):
         # 보험 건 수집 (홈페이지 / 고객요청 분리)
         ins_homepage = []
         ins_customer = []
-        if insurances:
+        sp_ins_homepage = []
+        sp_ins_customer = []
+
+        def _collect_insurance(ins_list, hp_out, cr_out):
+            if not ins_list:
+                return
             ins_scope = st.session_state.get("ins_type_select", "전체")
             from modules.config_loader import get_insurance_info
             from collections import OrderedDict
+
+            # 보험사별 그룹핑 (필터 전)
+            all_by_comp = OrderedDict()
+            for ins in ins_list:
+                if not ins.name or not ins.status:
+                    continue
+                all_by_comp.setdefault(ins.name, []).append(ins)
+
             hp_groups = OrderedDict()
             cr_groups = OrderedDict()
 
-            for ins in insurances:
-                if not ins.name or not ins.status:
-                    continue
-                if ins_scope == "유지" and ins.status not in ("유지", "휴면"):
-                    continue
-
-                info = get_insurance_info(ins.name) or {}
+            for comp, all_entries in all_by_comp.items():
+                info = get_insurance_info(comp) or {}
                 db_method = info.get("발급방법", "").strip()
 
-                if ins.status in ("유지", "휴면"):
+                if ins_scope == "유지":
+                    # 유지모드: 유지건만, DB 발급방법대로
+                    entries = [e for e in all_entries if e.status == "유지"]
+                    if not entries:
+                        continue
                     if db_method == "홈페이지":
-                        hp_groups.setdefault(ins.name, []).append(ins)
+                        hp_groups[comp] = entries
                     else:
-                        cr_groups.setdefault(ins.name, []).append(ins)
+                        cr_groups[comp] = entries
                 else:
-                    # 해지건(실효/소멸/만기) → 전부 고객요청
-                    cr_groups.setdefault(ins.name, []).append(ins)
+                    # 전체모드: 유지만 있으면 DB대로, 유지+기타 혼재면 전부 고객요청
+                    maintain = [e for e in all_entries if e.status in ("유지", "휴면")]
+                    others = [e for e in all_entries if e.status not in ("유지", "휴면")]
+
+                    if others:
+                        # 혼재 → 전부 고객요청
+                        cr_groups[comp] = all_entries
+                    elif maintain:
+                        # 유지만 → DB 발급방법대로
+                        if db_method == "홈페이지":
+                            hp_groups[comp] = maintain
+                        else:
+                            cr_groups[comp] = maintain
 
             for comp, entries in hp_groups.items():
                 info = get_insurance_info(comp) or {}
-                ins_homepage.append({
+                hp_out.append({
                     "name": comp,
                     "count": len(entries),
                     "tel": info.get("고객센터", ""),
@@ -527,7 +671,7 @@ def _build_manual_pdf(merged, client_name, insurances=None):
                 if cancel:
                     statuses = "/".join(sorted(set(e.status for e in cancel)))
                     docs.append(f"해지확인서 {len(cancel)}건 ({statuses})")
-                ins_customer.append({
+                cr_out.append({
                     "name": comp,
                     "count": len(entries),
                     "tel": info.get("고객센터", ""),
@@ -535,9 +679,13 @@ def _build_manual_pdf(merged, client_name, insurances=None):
                     "policy_nos": [e.policy_no for e in entries if e.policy_no],
                 })
 
+        _collect_insurance(insurances, ins_homepage, ins_customer)
+        _collect_insurance(spouse_insurances, sp_ins_homepage, sp_ins_customer)
+
         today = date.today().strftime("%Y.%m.%d")
         doc = build_manual_cover(all_names, client_name, today,
-                                 ins_homepage=ins_homepage, ins_customer=ins_customer)
+                                 ins_homepage=ins_homepage, ins_customer=ins_customer,
+                                 sp_ins_homepage=sp_ins_homepage, sp_ins_customer=sp_ins_customer)
         if doc.page_count > 0:
             pdf_bytes = doc.tobytes()
             doc.close()
@@ -552,8 +700,8 @@ def _build_manual_pdf(merged, client_name, insurances=None):
 # 고객요청 문자 (기간 포함)
 # ═══════════════════════════════════════
 
-def _build_customer_sms(customer_items, client_name, insurances=None):
-    """고객요청 문자 템플릿 — 기간 + 보험 포함"""
+def _build_customer_sms(customer_items, client_name, insurances=None, spouse_insurances=None):
+    """고객요청 문자 템플릿 — 기간 + 보험(본인+배우자) 포함"""
     # 팩스번호
     fax_number = ""
     agent_name = st.session_state.get("agent_select", "")
@@ -594,6 +742,8 @@ def _build_customer_sms(customer_items, client_name, insurances=None):
         for doc in item["docs"]:
             if doc == "통장거래내역" and bank_from and bank_to:
                 lines.append(f"* {doc} ({_fmt(bank_from)} ~ {_fmt(bank_to)})")
+                if item.get("accounts"):
+                    lines.append(f"  ({item['accounts']})")
             elif doc == "카드거래내역" and card_from and card_to:
                 lines.append(f"* {doc} ({_fmt(card_from)} ~ {_fmt(card_to)})")
             else:
@@ -607,55 +757,104 @@ def _build_customer_sms(customer_items, client_name, insurances=None):
         idx += 1
 
     # ── 보험 고객요청 건 추가 (엑셀 데이터 기반) ──
-    # 유지건: DB가 "고객요청"인 보험사만 문자에 포함
-    # 해지건(실효/소멸/만기): DB 무관 전부 문자에 포함
-    if insurances:
+    # 유지 모드: DB가 "고객요청"인 보험사만 문자 포함 (홈페이지는 매뉴얼)
+    # 전체 모드: 보험사 내 유지만 있으면 DB 분류, 유지+기타 혼합이면 무조건 고객요청
+    def _build_ins_sms_lines(ins_list, start_idx):
+        """보험 SMS 라인 생성. (lines_list, next_idx) 반환"""
+        if not ins_list:
+            return [], start_idx
         ins_scope = st.session_state.get("ins_type_select", "전체")
         if ins_scope == "유지":
-            ins_filtered = [i for i in insurances if i.name and i.status in ("유지", "휴면")]
+            ins_filtered = [i for i in ins_list if i.name and i.status == "유지"]
         else:
-            ins_filtered = [i for i in insurances if i.name]
+            ins_filtered = [i for i in ins_list if i.name]
 
-        if ins_filtered:
-            from collections import OrderedDict
-            from modules.config_loader import get_insurance_info
-            ins_groups = OrderedDict()
-            for ins in ins_filtered:
-                ins_groups.setdefault(ins.name, []).append(ins)
+        if not ins_filtered:
+            return [], start_idx
 
-            for comp, entries in ins_groups.items():
-                manual_info = get_insurance_info(comp) or {}
-                tel = manual_info.get("고객센터", "")
-                db_method = manual_info.get("발급방법", "").strip()
+        from collections import OrderedDict
+        from modules.config_loader import get_insurance_info
+        ins_groups = OrderedDict()
+        for ins in ins_filtered:
+            ins_groups.setdefault(ins.name, []).append(ins)
 
-                maintain = [e for e in entries if e.status in ("유지", "휴면")]
-                cancel = [e for e in entries if e.status not in ("유지", "휴면")]
+        result_lines = []
+        cur_idx = start_idx
+        for comp, entries in ins_groups.items():
+            manual_info = get_insurance_info(comp) or {}
+            tel = manual_info.get("고객센터", "")
+            db_method = manual_info.get("발급방법", "").strip()
 
-                # 유지건: DB가 고객요청인 보험사만 포함 (홈페이지는 매뉴얼로)
+            maintain = [e for e in entries if e.status in ("유지", "휴면")]
+            cancel = [e for e in entries if e.status not in ("유지", "휴면")]
+
+            if ins_scope == "유지":
+                # 유지 모드: DB 발급방법에 따라 분류
                 maintain_sms = maintain if db_method == "고객요청" else []
-                # 해지건: 전부 포함
-                cancel_sms = cancel
-
-                if not maintain_sms and not cancel_sms:
-                    continue
-
-                if tel:
-                    lines.append(f"{idx}. {comp}({tel})")
+                cancel_sms = []  # 유지 모드에선 해지건 없음
+            else:
+                # 전체 모드: 유지+기타 혼합이면 무조건 고객요청
+                if maintain and cancel:
+                    # 혼합 → 전부 고객요청
+                    maintain_sms = maintain
+                    cancel_sms = cancel
+                elif maintain and not cancel:
+                    # 유지만 → DB 분류
+                    maintain_sms = maintain if db_method == "고객요청" else []
+                    cancel_sms = []
                 else:
-                    lines.append(f"{idx}. {comp}")
+                    # 해지만
+                    maintain_sms = []
+                    cancel_sms = cancel
 
-                if maintain_sms:
-                    lines.append(f"* 유지건 {len(maintain_sms)}건 예상해지환급금증명서")
-                    for e in maintain_sms:
-                        lines.append(f"  ({e.policy_no})")
+            if not maintain_sms and not cancel_sms:
+                continue
 
-                if cancel_sms:
-                    lines.append(f"* 해지건 {len(cancel_sms)}건 해지확인서(해지환급금 기재)")
-                    for e in cancel_sms:
-                        lines.append(f"  ({e.policy_no})")
+            if tel:
+                result_lines.append(f"{cur_idx}. {comp}({tel})")
+            else:
+                result_lines.append(f"{cur_idx}. {comp}")
 
-                lines.append("")
-                idx += 1
+            if maintain_sms:
+                # 상태별 그룹 (유지, 휴면 등)
+                from collections import OrderedDict
+                status_groups = OrderedDict()
+                for e in maintain_sms:
+                    status_groups.setdefault(e.status or "유지", []).append(e)
+                for st_name, st_entries in status_groups.items():
+                    result_lines.append(f"* {st_name}건 {len(st_entries)}건 예상해지환급금증명서")
+                    for e in st_entries:
+                        if e.policy_no:
+                            result_lines.append(f"  ({e.policy_no})")
+
+            if cancel_sms:
+                # 상태별 그룹 (실효, 소멸, 해약 등)
+                from collections import OrderedDict
+                cancel_groups = OrderedDict()
+                for e in cancel_sms:
+                    cancel_groups.setdefault(e.status or "해지", []).append(e)
+                for st_name, st_entries in cancel_groups.items():
+                    result_lines.append(f"* {st_name}건 {len(st_entries)}건 해지확인서(해지환급금 기재)")
+                    for e in st_entries:
+                        if e.policy_no:
+                            result_lines.append(f"  ({e.policy_no})")
+
+            result_lines.append("")
+            cur_idx += 1
+
+        return result_lines, cur_idx
+
+    # 본인 보험
+    ins_lines, idx = _build_ins_sms_lines(insurances, idx)
+    lines.extend(ins_lines)
+
+    # 배우자 보험 (번호 1부터 재시작)
+    if spouse_insurances:
+        sp_lines, _ = _build_ins_sms_lines(spouse_insurances, 1)
+        if sp_lines:
+            lines.append(f"[{client_name}님의 배우자 요청사항]")
+            lines.append("")
+            lines.extend(sp_lines)
 
     lines.append("각 고객센터 상담사 연결 후 팩스요청해주시면 됩니다")
 
@@ -670,13 +869,59 @@ def _merge_by_institution(parsed: ParsedExcel) -> list:
     """기관명 기준으로 채권목록 + 은행 + 카드 병합"""
     groups = {}
 
+    # 카드 → 은행 병합 (통장/카드 같이 발급하는 곳만)
     CARD_TO_BANK = {
-        "하나카드": "하나은행", "전북카드": "전북은행", "우리카드": "우리은행",
+        "전북카드": "전북은행", "우리카드": "우리은행",
         "농협카드": "농협은행", "농축협카드": "농축협", "기업카드": "기업은행",
     }
 
+    # 은행 약칭 → 정식명
+    BANK_ALIASES = {
+        "신한": "신한은행", "국민": "국민은행", "우리": "우리은행", "하나": "하나은행",
+        "농협": "농협은행", "기업": "기업은행", "전북": "전북은행", "광주": "광주은행",
+        "경남": "경남은행", "대구": "대구은행", "부산": "부산은행", "제주": "제주은행",
+        "수협": "수협은행", "산업": "산업은행", "씨티": "씨티은행",
+    }
+
+    # 카드 약칭 → 정식명
+    CARD_ALIASES = {
+        "신한": "신한카드", "삼성": "삼성카드", "현대": "현대카드", "롯데": "롯데카드",
+        "비씨": "비씨카드", "하나": "하나카드", "우리": "우리카드", "국민": "국민카드",
+        "농협": "농협카드",
+    }
+
+    def _normalize_bank(name):
+        """은행 시트 이름 정규화"""
+        name = name.strip()
+        if name in BANK_ALIASES:
+            return BANK_ALIASES[name]
+        return name
+
+    def _normalize_card(name):
+        """카드 시트 이름 정규화"""
+        name = name.strip()
+        if name in CARD_ALIASES:
+            return CARD_ALIASES[name]
+        return name
+
     def _resolve(name):
-        return CARD_TO_BANK.get(name, name)
+        # 1차: 정확 매칭
+        if name in CARD_TO_BANK:
+            return CARD_TO_BANK[name]
+        # 2차: 공백 제거 후 매칭
+        stripped = name.replace(" ", "")
+        if stripped in CARD_TO_BANK:
+            return CARD_TO_BANK[stripped]
+        # 3차: "OO은행 카드" / "OO은행카드" → "OO은행" (병합 대상만)
+        import re
+        m = re.match(r'^(.+(?:은행|축협))\s*카드$', name)
+        if m:
+            bank = m.group(1)
+            # 하나은행 카드는 분리
+            if bank == "하나은행":
+                return "하나카드"
+            return bank
+        return name
 
     def _get_or_create(name):
         r = _resolve(name)
@@ -698,14 +943,14 @@ def _merge_by_institution(parsed: ParsedExcel) -> list:
                 groups[key]["docs"].append("부채증명서")
 
     for bank in parsed.banks:
-        key = _get_or_create(bank.name)
+        key = _get_or_create(_normalize_bank(bank.name))
         if "통장거래내역" not in groups[key]["docs"]:
             groups[key]["docs"].append("통장거래내역")
         if bank.account:
             groups[key]["accounts"].append(bank.account)
 
     for card in parsed.cards:
-        key = _get_or_create(card.name)
+        key = _get_or_create(_normalize_card(card.name))
         if "카드거래내역" not in groups[key]["docs"]:
             groups[key]["docs"].append("카드거래내역")
 

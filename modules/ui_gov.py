@@ -64,8 +64,7 @@ def render_gov_tab():
             )
 
     st.divider()
-
-    # ── 테이블 헤더 ──
+    gov_progress_placeholder = st.empty()  # 관공서 PDF 생성 진행바 (상단)
     hc = st.columns([0.3, 2.5])
     hc[0].markdown("<small style='color:#6b7280;font-weight:600;'>#</small>", unsafe_allow_html=True)
     hc[1].markdown("<small style='color:#6b7280;font-weight:600;'>서류 선택</small>", unsafe_allow_html=True)
@@ -95,7 +94,7 @@ def render_gov_tab():
                 st.session_state.gov_row_count += 1
                 st.rerun()
 
-    return {"forms": form_data_list, "generate_clicked": generate_clicked}
+    return {"forms": form_data_list, "generate_clicked": generate_clicked, "progress_placeholder": gov_progress_placeholder}
 
 
 def _render_gov_row(idx, form_names, gov_forms):

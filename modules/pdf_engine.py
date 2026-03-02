@@ -12,7 +12,7 @@ _settings = load_settings()
 FONT_PATH = _settings.get("font_path", "C:/Windows/Fonts/malgun.ttf")
 
 
-def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_homepage=None, ins_customer=None):
+def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_homepage=None, ins_customer=None, sp_ins_homepage=None, sp_ins_customer=None):
     """채권사별 발급 매뉴얼 커버 페이지 PDF 생성 (표 형태, 발급방법별 그룹)
     
     Args:
@@ -21,6 +21,8 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         warrant_date: 위임일자
         ins_homepage: 보험 홈페이지 발급 건 리스트 (optional)
         ins_customer: 보험 고객요청 건 리스트 (optional)
+        sp_ins_homepage: 배우자 보험 홈페이지 발급 건 (optional)
+        sp_ins_customer: 배우자 보험 고객요청 건 (optional)
     
     Returns:
         fitz.Document (매뉴얼 커버 페이지들)
@@ -282,9 +284,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
             doc_type = ins_item.get("doc_type", "")
             nos = ", ".join(ins_item.get("policy_nos", []))
 
-            note_text = doc_type
-            if nos:
-                note_text += f"\n{nos}"
+            note_text = ""
 
             heights = [
                 _text_height(comp, 7, COL_NAME[1]),
@@ -342,11 +342,9 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
             route = ins_item.get("route", "")
             nos = ", ".join(ins_item.get("policy_nos", []))
 
-            note_text = f"예상해지환급금증명서 {cnt}건"
-            if nos:
-                note_text += f"\n{nos}"
+            note_text = ""
             if route:
-                note_text += f"\n경로: {route}"
+                note_text = f"경로: {route}"
 
             heights = [
                 _text_height(comp, 7, COL_NAME[1]),
@@ -371,6 +369,113 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
             _draw_cell_text(page, COL_NUM[0], y, COL_NUM[1], row_h, str(row_num), 7, C_GRAY)
             _draw_cell_text(page, COL_NAME[0], y, COL_NAME[1], row_h, comp, 7, C_TEXT)
             _draw_cell_text(page, COL_METHOD[0], y, COL_METHOD[1], row_h, "홈페이지", 7, color_ins)
+            _draw_cell_text(page, COL_TEL[0], y, COL_TEL[1], row_h, tel, 7, C_TEXT)
+            _draw_cell_text(page, COL_NOTE[0], y, COL_NOTE[1], row_h, note_text, 7, C_TEXT)
+
+            y += row_h
+
+    # ── 배우자 보험 고객요청 섹션 ──
+    if sp_ins_customer:
+        y += 10
+        if y + 40 > MARGIN_B:
+            page = doc.new_page(width=W, height=H)
+            y = MARGIN_T
+
+        h = 16
+        bg_sp = (0.95, 0.90, 0.85)
+        color_sp = (0.5, 0.3, 0.1)
+        page.draw_rect(fitz.Rect(MARGIN_L, y, MARGIN_R, y + h), color=None, fill=bg_sp)
+        page.insert_text(
+            fitz.Point(MARGIN_L + 5, y + 12),
+            f"■ 배우자 보험 고객요청 ({len(sp_ins_customer)}개사)",
+            fontname="malgun", fontfile=FONT_PATH,
+            fontsize=9, color=color_sp
+        )
+        y += h
+
+        for ins_item in sp_ins_customer:
+            comp = ins_item["name"]
+            tel = ins_item.get("tel", "")
+            note_text = ""
+
+            heights = [
+                _text_height(comp, 7, COL_NAME[1]),
+                _text_height(tel, 7, COL_TEL[1]),
+            ]
+            row_h = max(max(heights), 16) + 4
+
+            if y + row_h > MARGIN_B:
+                page = doc.new_page(width=W, height=H)
+                y = MARGIN_T
+                y = _draw_header(page, y)
+
+            bg = C_ROW_EVEN if row_num % 2 == 0 else C_ROW_ODD
+            page.draw_rect(fitz.Rect(MARGIN_L, y, MARGIN_R, y + row_h), color=None, fill=bg)
+
+            for cx, cw in COLS[1:]:
+                page.draw_line(fitz.Point(cx, y), fitz.Point(cx, y + row_h), color=C_LINE, width=0.3)
+            page.draw_line(fitz.Point(MARGIN_L, y + row_h), fitz.Point(MARGIN_R, y + row_h), color=C_LINE, width=0.3)
+
+            row_num += 1
+            _draw_cell_text(page, COL_NUM[0], y, COL_NUM[1], row_h, str(row_num), 7, C_GRAY)
+            _draw_cell_text(page, COL_NAME[0], y, COL_NAME[1], row_h, comp, 7, C_TEXT)
+            _draw_cell_text(page, COL_METHOD[0], y, COL_METHOD[1], row_h, "고객요청", 7, color_sp)
+            _draw_cell_text(page, COL_TEL[0], y, COL_TEL[1], row_h, tel, 7, C_TEXT)
+            _draw_cell_text(page, COL_NOTE[0], y, COL_NOTE[1], row_h, note_text, 7, C_TEXT)
+
+            y += row_h
+
+    # ── 배우자 보험 홈페이지 발급 섹션 ──
+    if sp_ins_homepage:
+        y += 10
+        if y + 40 > MARGIN_B:
+            page = doc.new_page(width=W, height=H)
+            y = MARGIN_T
+
+        h = 16
+        bg_sp2 = (0.90, 0.88, 0.95)
+        color_sp2 = (0.35, 0.2, 0.6)
+        page.draw_rect(fitz.Rect(MARGIN_L, y, MARGIN_R, y + h), color=None, fill=bg_sp2)
+        page.insert_text(
+            fitz.Point(MARGIN_L + 5, y + 12),
+            f"■ 배우자 보험 홈페이지 발급 ({len(sp_ins_homepage)}개사)",
+            fontname="malgun", fontfile=FONT_PATH,
+            fontsize=9, color=color_sp2
+        )
+        y += h
+
+        for ins_item in sp_ins_homepage:
+            comp = ins_item["name"]
+            tel = ins_item.get("tel", "")
+            route = ins_item.get("route", "")
+
+            note_text = ""
+            if route:
+                note_text = f"경로: {route}"
+
+            heights = [
+                _text_height(comp, 7, COL_NAME[1]),
+                _text_height(tel, 7, COL_TEL[1]),
+                _text_height(note_text, 7, COL_NOTE[1]),
+            ]
+            row_h = max(max(heights), 16) + 4
+
+            if y + row_h > MARGIN_B:
+                page = doc.new_page(width=W, height=H)
+                y = MARGIN_T
+                y = _draw_header(page, y)
+
+            bg = C_ROW_EVEN if row_num % 2 == 0 else C_ROW_ODD
+            page.draw_rect(fitz.Rect(MARGIN_L, y, MARGIN_R, y + row_h), color=None, fill=bg)
+
+            for cx, cw in COLS[1:]:
+                page.draw_line(fitz.Point(cx, y), fitz.Point(cx, y + row_h), color=C_LINE, width=0.3)
+            page.draw_line(fitz.Point(MARGIN_L, y + row_h), fitz.Point(MARGIN_R, y + row_h), color=C_LINE, width=0.3)
+
+            row_num += 1
+            _draw_cell_text(page, COL_NUM[0], y, COL_NUM[1], row_h, str(row_num), 7, C_GRAY)
+            _draw_cell_text(page, COL_NAME[0], y, COL_NAME[1], row_h, comp, 7, C_TEXT)
+            _draw_cell_text(page, COL_METHOD[0], y, COL_METHOD[1], row_h, "홈페이지", 7, color_sp2)
             _draw_cell_text(page, COL_TEL[0], y, COL_TEL[1], row_h, tel, 7, C_TEXT)
             _draw_cell_text(page, COL_NOTE[0], y, COL_NOTE[1], row_h, note_text, 7, C_TEXT)
 
@@ -1340,6 +1445,16 @@ def build_creditor_bundle(template_path, client, agent, creditor, warrant_date, 
             lines.append(f"{i}. {doc_type}")
     
     delegation_text = "\n".join(lines) if lines else "서류 발급"
+
+    # 법률사무소 기재 필요 채권사 → 위임사항에 사무소 정보 추가
+    if _issue_info and _issue_info.get("법률사무소기재"):
+        law_firm = creditor.get("law_firm", {})
+        lf_name = law_firm.get("name", "")
+        lf_tel = law_firm.get("tel", "")
+        if lf_name:
+            delegation_text += f"\n\n[담당 법률사무소]\n{lf_name}"
+            if lf_tel:
+                delegation_text += f"\nTEL: {lf_tel}"
     
     pdfs = []
     

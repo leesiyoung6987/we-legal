@@ -81,6 +81,7 @@ class ParsedExcel:
     banks: List[BankCardEntry] = field(default_factory=list)
     cards: List[BankCardEntry] = field(default_factory=list)
     insurances: List[InsuranceEntry] = field(default_factory=list)
+    spouse_insurances: List[InsuranceEntry] = field(default_factory=list)
     errors: List[str] = field(default_factory=list)
 
     @property
@@ -160,14 +161,20 @@ def _parse_creditor_sheet(df) -> list:
 
 
 def _parse_bank_card_sheet(df) -> tuple:
-    """은행,카드 시트 파싱 - 헤더 감지 기반"""
+    """은행,카드 시트 파싱 - 헤더 감지 기반, 안전한 컬럼 접근"""
     banks = []
     cards = []
     mode = None
+    max_col = len(df.columns)
+
+    def _safe(row_idx, col_idx):
+        if col_idx >= max_col:
+            return ""
+        return _s(df.iloc[row_idx, col_idx])
 
     for row_idx in range(len(df)):
-        col_b = _s(df.iloc[row_idx, 1])
-        col_c = _s(df.iloc[row_idx, 2])
+        col_b = _safe(row_idx, 1)
+        col_c = _safe(row_idx, 2)
 
         if col_c == '은행':
             mode = 'bank'
@@ -181,24 +188,25 @@ def _parse_bank_card_sheet(df) -> tuple:
                 name=col_c,
                 entry_type="은행",
                 seq=_i(col_b),
-                account=_s(df.iloc[row_idx, 3]),
-                issued=_s(df.iloc[row_idx, 4]),
-                method=_s(df.iloc[row_idx, 5]),
+                account=_safe(row_idx, 3),
+                issued=_safe(row_idx, 4),
+                method=_safe(row_idx, 5),
             ))
         elif mode == 'card' and col_c:
             cards.append(BankCardEntry(
                 name=col_c,
                 entry_type="카드",
                 seq=_i(col_b),
-                issued=_s(df.iloc[row_idx, 4]),
+                issued=_safe(row_idx, 4),
             ))
 
     return banks, cards
 
 
-def _parse_insurance_sheet(df) -> list:
-    """보험 시트 파싱 - 헤더에서 열 위치 동적 감지"""
+def _parse_insurance_sheet(df) -> tuple:
+    """보험 시트 파싱 - 헤더에서 열 위치 동적 감지, 본인+배우자 구분"""
     insurances = []
+    spouse_insurances = []
 
     # 헤더 행 찾기 (순번 있는 행)
     header_row = None
@@ -211,7 +219,7 @@ def _parse_insurance_sheet(df) -> list:
             break
 
     if header_row is None:
-        return insurances
+        return insurances, spouse_insurances
 
     # 헤더에서 열 매핑 구축
     col_map = {}  # {'보험사': 3, '상태': 5, ...}
@@ -237,34 +245,38 @@ def _parse_insurance_sheet(df) -> list:
             return ""
         return _s(df.iloc[row_idx, col_idx])
 
-    # 데이터 행 파싱 (첫 번째 순번 헤더 이후 ~ 합계행 전)
-    found_first_section = False
+    def _parse_entry(row_idx):
+        return InsuranceEntry(
+            name=_safe(row_idx, c_name),
+            seq=_i(_s(df.iloc[row_idx, c_seq])),
+            contractor=_safe(row_idx, c_contractor),
+            insured=_safe(row_idx, c_insured),
+            status=_safe(row_idx, c_status),
+            product=_safe(row_idx, c_product),
+            policy_no=_safe(row_idx, c_policyno),
+            refund=_safe(row_idx, c_refund),
+            issued=_safe(row_idx, c_issued),
+            method=_safe(row_idx, c_method),
+        )
+
+    # 데이터 행 파싱: 본인 → 배우자
+    current_list = insurances  # 처음엔 본인
     for row_idx in range(header_row + 1, len(df)):
         seq_val = _s(df.iloc[row_idx, c_seq])
         name_val = _safe(row_idx, c_name)
 
-        # 두 번째 '순번' 나오면 배우자 영역 → 중단
+        # 두 번째 '순번' 나오면 배우자 영역으로 전환
         if seq_val == '순번':
-            break
+            current_list = spouse_insurances
+            continue
 
         if seq_val in ('', ) or '합계' in seq_val or '정리' in seq_val:
             continue
 
         if name_val and seq_val:
-            insurances.append(InsuranceEntry(
-                name=name_val,
-                seq=_i(seq_val),
-                contractor=_safe(row_idx, c_contractor),
-                insured=_safe(row_idx, c_insured),
-                status=_safe(row_idx, c_status),
-                product=_safe(row_idx, c_product),
-                policy_no=_safe(row_idx, c_policyno),
-                refund=_safe(row_idx, c_refund),
-                issued=_safe(row_idx, c_issued),
-                method=_safe(row_idx, c_method),
-            ))
+            current_list.append(_parse_entry(row_idx))
 
-    return insurances
+    return insurances, spouse_insurances
 
 
 def parse_excel(file_path_or_buffer) -> ParsedExcel:
@@ -306,7 +318,7 @@ def parse_excel(file_path_or_buffer) -> ParsedExcel:
     # ── 보험 ──
     if '보험' in sheets:
         df = sheets['보험']
-        result.insurances = _parse_insurance_sheet(df)
+        result.insurances, result.spouse_insurances = _parse_insurance_sheet(df)
         if not result.person.name:
             result.person = _parse_person_from_sidebar(df)
     else:

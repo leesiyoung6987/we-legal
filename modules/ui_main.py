@@ -13,6 +13,27 @@ from modules.config_loader import load_settings, load_creditors, get_doc_options
 # 유틸
 # ═══════════════════════════════════════
 
+def _delete_creditor(del_idx):
+    """채권사 삭제: del_idx 이후를 한 칸씩 당기고 마지막 슬롯 초기화"""
+    count = st.session_state.get("creditor_count", 10)
+    # 당기기
+    for i in range(del_idx, count - 1):
+        for prefix in ["cred_", "docs_", "acct_", "cust_",
+                        "df_bank_", "dt_bank_", "df_card_", "dt_card_"]:
+            next_key = f"{prefix}{i+1}"
+            cur_key = f"{prefix}{i}"
+            if next_key in st.session_state:
+                st.session_state[cur_key] = st.session_state[next_key]
+            else:
+                st.session_state.pop(cur_key, None)
+    # 마지막 슬롯 초기화
+    last = count - 1
+    for prefix in ["cred_", "docs_", "acct_", "cust_",
+                    "df_bank_", "dt_bank_", "df_card_", "dt_card_"]:
+        st.session_state.pop(f"{prefix}{last}", None)
+    st.session_state["creditor_count"] = max(count - 1, 1)
+
+
 def _calc_start(end_date, years):
     try:
         return end_date - relativedelta(years=years) + timedelta(days=1)
@@ -88,7 +109,7 @@ def render_main():
     settings = load_settings()
     app_cfg = settings.get("app", {})
     max_cred = app_cfg.get("max_creditors", 20)
-    default_cred = 5  # 기본 5개로 축소
+    default_cred = 10
 
     # 멀티셀렉트 옵션 (— 선택 — 제외)
     all_labels = get_doc_options(settings)
@@ -134,6 +155,7 @@ def render_main():
             )
 
     # ── 기간 일괄설정 (접기) ──
+    progress_placeholder = st.empty()  # PDF 생성 진행바 위치 (상단)
     with st.expander("📅 거래내역 기간 일괄설정", expanded=False):
         _render_global_date()
 
@@ -222,7 +244,7 @@ def render_main():
                 st.session_state.creditor_count += 1
                 st.rerun()
 
-    return {"creditors": creditors, "generate_clicked": generate_clicked}
+    return {"creditors": creditors, "generate_clicked": generate_clicked, "progress_placeholder": progress_placeholder}
 
 
 def _render_global_date():
@@ -271,7 +293,7 @@ def _render_creditor_row(idx, doc_options, needs_date):
             unsafe_allow_html=True,
         )
 
-    cols = st.columns([0.3, 1.2, 2.5])
+    cols = st.columns([0.3, 1.2, 2.5, 0.3])
 
     with cols[0]:
         st.markdown(
@@ -291,6 +313,11 @@ def _render_creditor_row(idx, doc_options, needs_date):
             placeholder="서류 선택..."
         )
 
+    with cols[3]:
+        if st.button("🗑️", key=f"del_{idx}", help="채권사 삭제"):
+            _delete_creditor(idx)
+            st.rerun()
+
         # 거래내역 날짜 상세 입력
         has_bank = "통장거래내역" in selected_docs
         has_card = "카드거래내역" in selected_docs
@@ -302,15 +329,15 @@ def _render_creditor_row(idx, doc_options, needs_date):
                 with bc[0]:
                     st.markdown("<div style='padding-top:8px;font-size:12px;color:#6b7280;'>통장</div>", unsafe_allow_html=True)
                 with bc[1]:
-                    st.date_input(
-                        "시작", value=st.session_state.get(f"df_bank_{idx}", ds),
-                        key=f"df_bank_{idx}", label_visibility="collapsed"
-                    )
+                    _bank_from_kwargs = {"key": f"df_bank_{idx}", "label_visibility": "collapsed"}
+                    if f"df_bank_{idx}" not in st.session_state:
+                        _bank_from_kwargs["value"] = ds
+                    st.date_input("시작", **_bank_from_kwargs)
                 with bc[2]:
-                    st.date_input(
-                        "종료", value=st.session_state.get(f"dt_bank_{idx}", de),
-                        key=f"dt_bank_{idx}", label_visibility="collapsed"
-                    )
+                    _bank_to_kwargs = {"key": f"dt_bank_{idx}", "label_visibility": "collapsed"}
+                    if f"dt_bank_{idx}" not in st.session_state:
+                        _bank_to_kwargs["value"] = de
+                    st.date_input("종료", **_bank_to_kwargs)
                 with bc[3]:
                     st.text_input(
                         "계좌", placeholder="계좌번호",
@@ -322,15 +349,15 @@ def _render_creditor_row(idx, doc_options, needs_date):
                 with cc[0]:
                     st.markdown("<div style='padding-top:8px;font-size:12px;color:#6b7280;'>카드</div>", unsafe_allow_html=True)
                 with cc[1]:
-                    st.date_input(
-                        "시작", value=st.session_state.get(f"df_card_{idx}", ds),
-                        key=f"df_card_{idx}", label_visibility="collapsed"
-                    )
+                    _card_from_kwargs = {"key": f"df_card_{idx}", "label_visibility": "collapsed"}
+                    if f"df_card_{idx}" not in st.session_state:
+                        _card_from_kwargs["value"] = ds
+                    st.date_input("시작", **_card_from_kwargs)
                 with cc[2]:
-                    st.date_input(
-                        "종료", value=st.session_state.get(f"dt_card_{idx}", de),
-                        key=f"dt_card_{idx}", label_visibility="collapsed"
-                    )
+                    _card_to_kwargs = {"key": f"dt_card_{idx}", "label_visibility": "collapsed"}
+                    if f"dt_card_{idx}" not in st.session_state:
+                        _card_to_kwargs["value"] = de
+                    st.date_input("종료", **_card_to_kwargs)
 
         if has_custom:
             custom_text = st.text_input(
