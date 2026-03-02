@@ -18,12 +18,19 @@ _font_candidates = [
     "/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc",
 ]
 FONT_PATH = None
+FONT_NAME = "korea"  # PyMuPDF CJK 내장 폰트 (fallback)
 for _fp in _font_candidates:
     if _fp and os.path.exists(_fp):
         FONT_PATH = _fp
+        FONT_NAME = "malgun"
         break
-if not FONT_PATH:
-    FONT_PATH = "helv"
+
+def _font_kwargs(fontsize=11, color=(0, 0, 0)):
+    """폰트 kwargs 생성 - 외부폰트 없으면 fontfile 제외"""
+    kw = {"fontname": FONT_NAME, "fontsize": fontsize, "color": color}
+    if FONT_PATH:
+        kw["fontfile"] = FONT_PATH
+    return kw
 
 
 def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_homepage=None, ins_customer=None, sp_ins_homepage=None, sp_ins_customer=None):
@@ -44,7 +51,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
     from modules.config_loader import get_issue_info
     
     doc = fitz.open()
-    font = fitz.Font(fontfile=FONT_PATH)
+    font = fitz.Font(fontfile=FONT_PATH) if FONT_PATH else fitz.Font("korea")
     
     # A4 가로 (Landscape)
     W, H = 842, 595
@@ -119,7 +126,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
                         if current.strip():
                             page.insert_text(
                                 fitz.Point(x + padding, cy), current,
-                                fontname="malgun", fontfile=FONT_PATH,
+                                fontname=FONT_NAME,
                                 fontsize=font_size, color=color
                             )
                             cy += font_size + 3
@@ -129,14 +136,14 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
                 if current.strip() and cy + font_size <= y + h:
                     page.insert_text(
                         fitz.Point(x + padding, cy), current,
-                        fontname="malgun", fontfile=FONT_PATH,
+                        fontname=FONT_NAME,
                         fontsize=font_size, color=color
                     )
                     cy += font_size + 3
             else:
                 page.insert_text(
                     fitz.Point(x + padding, cy), line,
-                    fontname="malgun", fontfile=FONT_PATH,
+                    fontname=FONT_NAME,
                     fontsize=font_size, color=color
                 )
                 cy += font_size + 3
@@ -150,7 +157,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         for i, (cx, cw) in enumerate(COLS):
             page.insert_text(
                 fitz.Point(cx + 3, y + 13), COL_HEADERS[i],
-                fontname="malgun", fontfile=FONT_PATH,
+                fontname=FONT_NAME,
                 fontsize=8, color=C_WHITE
             )
         # 세로 구분선
@@ -169,7 +176,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         label = f"■ {method} ({count}개)"
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12), label,
-            fontname="malgun", fontfile=FONT_PATH,
+            fontname=FONT_NAME,
             fontsize=9, color=color
         )
         return y + h
@@ -202,12 +209,12 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
     # 타이틀
     page.insert_text(
         fitz.Point(MARGIN_L, y + 16), f"발급 매뉴얼",
-        fontname="malgun", fontfile=FONT_PATH, fontsize=16, color=C_TITLE
+        fontname=FONT_NAME, fontsize=16, color=C_TITLE
     )
     page.insert_text(
         fitz.Point(MARGIN_L + 130, y + 16),
         f"{client_name}  |  {warrant_date}  |  총 {len(creditor_names)}개 채권사",
-        fontname="malgun", fontfile=FONT_PATH, fontsize=9, color=C_GRAY
+        fontname=FONT_NAME, fontsize=9, color=C_GRAY
     )
     y += 25
     
@@ -287,7 +294,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12),
             f"■ 보험 고객요청 ({len(ins_customer)}개사)",
-            fontname="malgun", fontfile=FONT_PATH,
+            fontname=FONT_NAME,
             fontsize=9, color=color_cr
         )
         y += h
@@ -344,7 +351,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12),
             f"■ 보험 홈페이지 발급 ({len(ins_homepage)}개사)",
-            fontname="malgun", fontfile=FONT_PATH,
+            fontname=FONT_NAME,
             fontsize=9, color=color_ins
         )
         y += h
@@ -402,7 +409,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12),
             f"■ 배우자 보험 고객요청 ({len(sp_ins_customer)}개사)",
-            fontname="malgun", fontfile=FONT_PATH,
+            fontname=FONT_NAME,
             fontsize=9, color=color_sp
         )
         y += h
@@ -453,7 +460,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12),
             f"■ 배우자 보험 홈페이지 발급 ({len(sp_ins_homepage)}개사)",
-            fontname="malgun", fontfile=FONT_PATH,
+            fontname=FONT_NAME,
             fontsize=9, color=color_sp2
         )
         y += h
@@ -499,25 +506,14 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
 
 
 def insert_text(page, x_pct, y_pct, text, font_size=11):
-    """PDF 페이지에 퍼센트 좌표로 텍스트 삽입
-    
-    Args:
-        page: fitz.Page 객체
-        x_pct: X 좌표 (0~100, 페이지 너비 기준 %)
-        y_pct: Y 좌표 (0~100, 페이지 높이 기준 %)
-        text: 삽입할 텍스트
-        font_size: 글자 크기 (기본 11)
-    """
+    """PDF 페이지에 퍼센트 좌표로 텍스트 삽입"""
     rect = page.rect
     x = rect.width * (x_pct / 100)
     y = rect.height * (y_pct / 100)
     page.insert_text(
         fitz.Point(x, y),
         str(text),
-        fontname="malgun",
-        fontfile=FONT_PATH,
-        fontsize=font_size,
-        color=(0, 0, 0)
+        **_font_kwargs(fontsize=font_size)
     )
 
 
@@ -534,13 +530,15 @@ def insert_text_spaced(page, x_pct, y_pct, text, font_size=11, spacing=0):
     rect = page.rect
     x = rect.width * (x_pct / 100)
     y = rect.height * (y_pct / 100)
-    font = fitz.Font(fontfile=FONT_PATH)
+    if FONT_PATH and os.path.exists(FONT_PATH):
+        font = fitz.Font(fontfile=FONT_PATH) if FONT_PATH else fitz.Font("korea")
+    else:
+        font = fitz.Font("korea")
     
     for char in str(text):
         page.insert_text(
             fitz.Point(x, y), char,
-            fontname="malgun", fontfile=FONT_PATH,
-            fontsize=font_size, color=(0, 0, 0)
+            **_font_kwargs(fontsize=font_size)
         )
         char_width = font.text_length(char, fontsize=font_size)
         x += char_width + spacing
@@ -965,7 +963,7 @@ def _fill_warrant_fallback(page, client, agent, creditor_name, delegation_text, 
     # 채권사명 + 귀중을 하나로
     combined = f"{creditor_name}  귀중"
     # 중앙 정렬: 텍스트 너비 계산 후 x 위치 결정
-    font = fitz.Font(fontfile=FONT_PATH)
+    font = fitz.Font(fontfile=FONT_PATH) if FONT_PATH else fitz.Font("korea")
     text_width = font.text_length(combined, fontsize=26)
     center_x = (rect.width - text_width) / 2
     center_x_pct = center_x / rect.width * 100
