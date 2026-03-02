@@ -7,9 +7,23 @@ pdf_engine.py - PDF 생성 엔진
 import fitz  # PyMuPDF
 from modules.config_loader import load_coords, load_settings
 
-# 폰트 경로는 settings에서 로드
+# 폰트 경로 자동 감지
+import os
 _settings = load_settings()
-FONT_PATH = _settings.get("font_path", "C:/Windows/Fonts/malgun.ttf")
+_font_candidates = [
+    _settings.get("font_path", ""),
+    "C:/Windows/Fonts/malgun.ttf",
+    os.path.join(os.path.dirname(__file__), "..", "fonts", "malgun.ttf"),
+    "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc",
+]
+FONT_PATH = None
+for _fp in _font_candidates:
+    if _fp and os.path.exists(_fp):
+        FONT_PATH = _fp
+        break
+if not FONT_PATH:
+    FONT_PATH = "helv"
 
 
 def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_homepage=None, ins_customer=None, sp_ins_homepage=None, sp_ins_customer=None):

@@ -410,8 +410,7 @@ def render_excel_delegation_tab():
     if customer_items or has_ins_customer or has_spouse_ins_customer:
         sms_text = _build_customer_sms(customer_items, parsed.person.name, parsed.insurances, parsed.spouse_insurances)
         with st.expander("📱 고객요청 문자", expanded=True):
-            st.code(sms_text, language=None)
-            # 클립보드 복사 버튼 (JSON으로 안전하게 전달)
+            # 클립보드 복사 버튼 (상단)
             import streamlit.components.v1 as components
             sms_json = json.dumps(sms_text, ensure_ascii=False)
             components.html(f"""
@@ -421,6 +420,7 @@ def render_excel_delegation_tab():
             font-size:15px;font-weight:600;cursor:pointer;width:100%;margin-top:4px;">
             📋 문자 복사</button>
             """, height=55)
+            st.code(sms_text, language=None)
 
 
 # ═══════════════════════════════════════
@@ -765,7 +765,7 @@ def _build_customer_sms(customer_items, client_name, insurances=None, spouse_ins
             return [], start_idx
         ins_scope = st.session_state.get("ins_type_select", "전체")
         if ins_scope == "유지":
-            ins_filtered = [i for i in ins_list if i.name and i.status == "유지"]
+            ins_filtered = [i for i in ins_list if i.name and i.status in ("유지", "휴면")]
         else:
             ins_filtered = [i for i in ins_list if i.name]
 
