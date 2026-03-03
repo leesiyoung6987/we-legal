@@ -1660,7 +1660,14 @@ def build_creditor_bundle(template_path, client, agent, creditor, warrant_date, 
                     # 좌표가 있으면 날짜 채우기
                     coords_name = aa.get("coords", "")
                     if coords_name:
-                        coords = load_coords(coords_name)
+                        # 수임인 이름 포함 좌표 먼저 찾기 (예: 대부업체/이시영_재직증명서)
+                        agent_name = agent.get("name", "")
+                        doc_name = coords_name.split("/")[-1]
+                        folder = coords_name.split("/")[0] if "/" in coords_name else ""
+                        agent_coords_name = f"{folder}/{agent_name}_{doc_name}" if folder else f"{agent_name}_{doc_name}"
+                        coords = load_coords(agent_coords_name)
+                        if not coords:
+                            coords = load_coords(coords_name)  # fallback: 기본 이름
                         if coords:
                             from datetime import datetime, timedelta
                             try:
