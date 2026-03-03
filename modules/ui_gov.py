@@ -14,6 +14,13 @@ def load_gov_forms():
     return data
 
 
+def _delete_gov_row(del_idx):
+    """관공서 서류 행 삭제"""
+    count = st.session_state.get("gov_row_count", 5)
+    st.session_state["_pending_gov_delete"] = del_idx
+    st.session_state["gov_row_count"] = max(count - 1, 1)
+
+
 def render_gov_tab():
     """관공서 서류 탭 렌더링
     
@@ -107,13 +114,18 @@ def _render_gov_row(idx, form_names, gov_forms):
             unsafe_allow_html=True,
         )
 
-    cols = st.columns([0.3, 2.5])
+    cols = st.columns([0.3, 2.5, 0.3])
 
     with cols[0]:
         st.markdown(
             f"<div style='padding-top:8px;color:#6b7280;font-weight:600;'>{idx+1}</div>",
             unsafe_allow_html=True,
         )
+
+    with cols[2]:
+        if st.button("🗑️", key=f"gov_del_{idx}", help="서류 삭제"):
+            _delete_gov_row(idx)
+            st.rerun()
 
     with cols[1]:
         selected = st.selectbox(

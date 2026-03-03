@@ -16,21 +16,9 @@ from modules.config_loader import load_settings, load_creditors, get_doc_options
 def _delete_creditor(del_idx):
     """채권사 삭제: del_idx 이후를 한 칸씩 당기고 마지막 슬롯 초기화"""
     count = st.session_state.get("creditor_count", 10)
-    # 당기기
-    for i in range(del_idx, count - 1):
-        for prefix in ["cred_", "docs_", "acct_", "cust_",
-                        "df_bank_", "dt_bank_", "df_card_", "dt_card_"]:
-            next_key = f"{prefix}{i+1}"
-            cur_key = f"{prefix}{i}"
-            if next_key in st.session_state:
-                st.session_state[cur_key] = st.session_state[next_key]
-            else:
-                st.session_state.pop(cur_key, None)
-    # 마지막 슬롯 초기화
-    last = count - 1
-    for prefix in ["cred_", "docs_", "acct_", "cust_",
-                    "df_bank_", "dt_bank_", "df_card_", "dt_card_"]:
-        st.session_state.pop(f"{prefix}{last}", None)
+    # 삭제할 인덱스 저장 후 rerun에서 처리
+    # 위젯 키는 직접 수정 불가 → _pending_delete 플래그로 처리
+    st.session_state["_pending_delete"] = del_idx
     st.session_state["creditor_count"] = max(count - 1, 1)
 
 
@@ -318,52 +306,52 @@ def _render_creditor_row(idx, doc_options, needs_date):
             _delete_creditor(idx)
             st.rerun()
 
-        # 거래내역 날짜 상세 입력
-        has_bank = "통장거래내역" in selected_docs
-        has_card = "카드거래내역" in selected_docs
-        has_custom = "기타" in selected_docs
+    # 거래내역 날짜 상세 입력 (컬럼 밖에서 전체 너비 사용)
+    has_bank = "통장거래내역" in selected_docs
+    has_card = "카드거래내역" in selected_docs
+    has_custom = "기타" in selected_docs
 
-        if has_bank or has_card:
-            if has_bank:
-                bc = st.columns([0.5, 1, 1, 1])
-                with bc[0]:
-                    st.markdown("<div style='padding-top:8px;font-size:12px;color:#6b7280;'>통장</div>", unsafe_allow_html=True)
-                with bc[1]:
-                    _bank_from_kwargs = {"key": f"df_bank_{idx}", "label_visibility": "collapsed"}
-                    if f"df_bank_{idx}" not in st.session_state:
-                        _bank_from_kwargs["value"] = ds
-                    st.date_input("시작", **_bank_from_kwargs)
-                with bc[2]:
-                    _bank_to_kwargs = {"key": f"dt_bank_{idx}", "label_visibility": "collapsed"}
-                    if f"dt_bank_{idx}" not in st.session_state:
-                        _bank_to_kwargs["value"] = de
-                    st.date_input("종료", **_bank_to_kwargs)
-                with bc[3]:
-                    st.text_input(
-                        "계좌", placeholder="계좌번호",
-                        key=f"acct_{idx}", label_visibility="collapsed"
-                    )
+    if has_bank or has_card:
+        if has_bank:
+            bc = st.columns([0.5, 1, 1, 1])
+            with bc[0]:
+                st.markdown("<div style='padding-top:8px;font-size:12px;color:#6b7280;'>통장</div>", unsafe_allow_html=True)
+            with bc[1]:
+                _bank_from_kwargs = {"key": f"df_bank_{idx}", "label_visibility": "collapsed"}
+                if f"df_bank_{idx}" not in st.session_state:
+                    _bank_from_kwargs["value"] = ds
+                st.date_input("시작", **_bank_from_kwargs)
+            with bc[2]:
+                _bank_to_kwargs = {"key": f"dt_bank_{idx}", "label_visibility": "collapsed"}
+                if f"dt_bank_{idx}" not in st.session_state:
+                    _bank_to_kwargs["value"] = de
+                st.date_input("종료", **_bank_to_kwargs)
+            with bc[3]:
+                st.text_input(
+                    "계좌", placeholder="계좌번호",
+                    key=f"acct_{idx}", label_visibility="collapsed"
+                )
 
-            if has_card:
-                cc = st.columns([0.5, 1, 1, 1])
-                with cc[0]:
-                    st.markdown("<div style='padding-top:8px;font-size:12px;color:#6b7280;'>카드</div>", unsafe_allow_html=True)
-                with cc[1]:
-                    _card_from_kwargs = {"key": f"df_card_{idx}", "label_visibility": "collapsed"}
-                    if f"df_card_{idx}" not in st.session_state:
-                        _card_from_kwargs["value"] = ds
-                    st.date_input("시작", **_card_from_kwargs)
-                with cc[2]:
-                    _card_to_kwargs = {"key": f"dt_card_{idx}", "label_visibility": "collapsed"}
-                    if f"dt_card_{idx}" not in st.session_state:
-                        _card_to_kwargs["value"] = de
-                    st.date_input("종료", **_card_to_kwargs)
+        if has_card:
+            cc = st.columns([0.5, 1, 1, 1])
+            with cc[0]:
+                st.markdown("<div style='padding-top:8px;font-size:12px;color:#6b7280;'>카드</div>", unsafe_allow_html=True)
+            with cc[1]:
+                _card_from_kwargs = {"key": f"df_card_{idx}", "label_visibility": "collapsed"}
+                if f"df_card_{idx}" not in st.session_state:
+                    _card_from_kwargs["value"] = ds
+                st.date_input("시작", **_card_from_kwargs)
+            with cc[2]:
+                _card_to_kwargs = {"key": f"dt_card_{idx}", "label_visibility": "collapsed"}
+                if f"dt_card_{idx}" not in st.session_state:
+                    _card_to_kwargs["value"] = de
+                st.date_input("종료", **_card_to_kwargs)
 
-        if has_custom:
-            custom_text = st.text_input(
-                "기타 서류명", placeholder="직접 입력",
-                key=f"cust_{idx}", label_visibility="collapsed"
-            )
+    if has_custom:
+        custom_text = st.text_input(
+            "기타 서류명", placeholder="직접 입력",
+            key=f"cust_{idx}", label_visibility="collapsed"
+        )
 
     # docs 리스트 조립
     docs = []
