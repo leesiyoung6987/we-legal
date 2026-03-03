@@ -15,9 +15,28 @@ def load_gov_forms():
 
 
 def _delete_gov_row(del_idx):
-    """관공서 서류 행 삭제"""
+    """관공서 서류 행 삭제: 해당 행 데이터를 비우고 위로 당김"""
     count = st.session_state.get("gov_row_count", 5)
-    st.session_state["_pending_gov_delete"] = del_idx
+    # gov_sel_ 키와 고유필드 키 이동
+    for i in range(del_idx, count - 1):
+        next_key = f"gov_sel_{i+1}"
+        cur_key = f"gov_sel_{i}"
+        if next_key in st.session_state:
+            try:
+                st.session_state[cur_key] = st.session_state[next_key]
+            except Exception:
+                pass
+        else:
+            try:
+                del st.session_state[cur_key]
+            except (KeyError, Exception):
+                pass
+    # 마지막 슬롯 삭제
+    last = count - 1
+    try:
+        del st.session_state[f"gov_sel_{last}"]
+    except (KeyError, Exception):
+        pass
     st.session_state["gov_row_count"] = max(count - 1, 1)
 
 

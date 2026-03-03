@@ -14,11 +14,35 @@ from modules.config_loader import load_settings, load_creditors, get_doc_options
 # ═══════════════════════════════════════
 
 def _delete_creditor(del_idx):
-    """채권사 삭제: del_idx 이후를 한 칸씩 당기고 마지막 슬롯 초기화"""
+    """채권사 삭제: del_idx 행의 데이터를 비우고 위로 당김"""
     count = st.session_state.get("creditor_count", 10)
-    # 삭제할 인덱스 저장 후 rerun에서 처리
-    # 위젯 키는 직접 수정 불가 → _pending_delete 플래그로 처리
-    st.session_state["_pending_delete"] = del_idx
+    prefixes = ["cred_", "docs_", "acct_", "cust_",
+                "df_bank_", "dt_bank_", "df_card_", "dt_card_"]
+
+    # 삭제 대상부터 마지막까지: 다음 행 값으로 덮어쓰기
+    for i in range(del_idx, count - 1):
+        for prefix in prefixes:
+            next_key = f"{prefix}{i+1}"
+            cur_key = f"{prefix}{i}"
+            if next_key in st.session_state:
+                try:
+                    st.session_state[cur_key] = st.session_state[next_key]
+                except Exception:
+                    pass  # 위젯 키 충돌 무시
+            else:
+                try:
+                    del st.session_state[cur_key]
+                except (KeyError, Exception):
+                    pass
+
+    # 마지막 슬롯 삭제
+    last = count - 1
+    for prefix in prefixes:
+        try:
+            del st.session_state[f"{prefix}{last}"]
+        except (KeyError, Exception):
+            pass
+
     st.session_state["creditor_count"] = max(count - 1, 1)
 
 

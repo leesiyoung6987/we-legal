@@ -692,7 +692,9 @@ def _build_manual_pdf(merged, client_name, insurances=None, spouse_insurances=No
             return pdf_bytes
         doc.close()
     except Exception as e:
-        print(f"[DEBUG] 매뉴얼 PDF 에러: {e}")
+        import traceback
+        st.error(f"매뉴얼 PDF 생성 실패: {e}")
+        print(f"[DEBUG] 매뉴얼 PDF 에러: {traceback.format_exc()}")
     return None
 
 
