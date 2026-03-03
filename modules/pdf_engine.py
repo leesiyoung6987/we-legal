@@ -126,8 +126,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
                         if current.strip():
                             page.insert_text(
                                 fitz.Point(x + padding, cy), current,
-                                fontname=FONT_NAME,
-                                fontsize=font_size, color=color
+                                **_font_kwargs(fontsize=font_size, color=color)
                             )
                             cy += font_size + 3
                         current = char
@@ -136,15 +135,13 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
                 if current.strip() and cy + font_size <= y + h:
                     page.insert_text(
                         fitz.Point(x + padding, cy), current,
-                        fontname=FONT_NAME,
-                        fontsize=font_size, color=color
+                        **_font_kwargs(fontsize=font_size, color=color)
                     )
                     cy += font_size + 3
             else:
                 page.insert_text(
                     fitz.Point(x + padding, cy), line,
-                    fontname=FONT_NAME,
-                    fontsize=font_size, color=color
+                    **_font_kwargs(fontsize=font_size, color=color)
                 )
                 cy += font_size + 3
     
@@ -157,8 +154,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         for i, (cx, cw) in enumerate(COLS):
             page.insert_text(
                 fitz.Point(cx + 3, y + 13), COL_HEADERS[i],
-                fontname=FONT_NAME,
-                fontsize=8, color=C_WHITE
+                **_font_kwargs(fontsize=8, color=C_WHITE)
             )
         # 세로 구분선
         for cx, cw in COLS[1:]:
@@ -176,8 +172,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         label = f"■ {method} ({count}개)"
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12), label,
-            fontname=FONT_NAME,
-            fontsize=9, color=color
+            **_font_kwargs(fontsize=9, color=color)
         )
         return y + h
     
@@ -209,12 +204,12 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
     # 타이틀
     page.insert_text(
         fitz.Point(MARGIN_L, y + 16), f"발급 매뉴얼",
-        fontname=FONT_NAME, fontsize=16, color=C_TITLE
+        **_font_kwargs(fontsize=16, color=C_TITLE)
     )
     page.insert_text(
         fitz.Point(MARGIN_L + 130, y + 16),
         f"{client_name}  |  {warrant_date}  |  총 {len(creditor_names)}개 채권사",
-        fontname=FONT_NAME, fontsize=9, color=C_GRAY
+        **_font_kwargs(fontsize=9, color=C_GRAY)
     )
     y += 25
     
@@ -294,8 +289,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12),
             f"■ 보험 고객요청 ({len(ins_customer)}개사)",
-            fontname=FONT_NAME,
-            fontsize=9, color=color_cr
+            **_font_kwargs(fontsize=9, color=color_cr)
         )
         y += h
 
@@ -351,8 +345,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12),
             f"■ 보험 홈페이지 발급 ({len(ins_homepage)}개사)",
-            fontname=FONT_NAME,
-            fontsize=9, color=color_ins
+            **_font_kwargs(fontsize=9, color=color_ins)
         )
         y += h
 
@@ -409,8 +402,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12),
             f"■ 배우자 보험 고객요청 ({len(sp_ins_customer)}개사)",
-            fontname=FONT_NAME,
-            fontsize=9, color=color_sp
+            **_font_kwargs(fontsize=9, color=color_sp)
         )
         y += h
 
@@ -460,8 +452,7 @@ def build_manual_cover(creditor_names, client_name="", warrant_date="", ins_home
         page.insert_text(
             fitz.Point(MARGIN_L + 5, y + 12),
             f"■ 배우자 보험 홈페이지 발급 ({len(sp_ins_homepage)}개사)",
-            fontname=FONT_NAME,
-            fontsize=9, color=color_sp2
+            **_font_kwargs(fontsize=9, color=color_sp2)
         )
         y += h
 

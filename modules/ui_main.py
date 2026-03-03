@@ -326,9 +326,8 @@ def _render_creditor_row(idx, doc_options, needs_date):
         )
 
     with cols[3]:
-        if st.button("🗑️", key=f"del_{idx}", help="채권사 삭제"):
-            _delete_creditor(idx)
-            st.rerun()
+        st.button("🗑️", key=f"del_{idx}", help="채권사 삭제",
+                  on_click=_delete_creditor, args=(idx,))
 
     # 거래내역 날짜 상세 입력 (컬럼 밖에서 전체 너비 사용)
     has_bank = "통장거래내역" in selected_docs
